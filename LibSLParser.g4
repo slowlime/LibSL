@@ -19,20 +19,20 @@ header
     ;
 
 globalDecl
-    :   ImportStatement # Import
-    |   IncludeStatement # Include
-    |   semanticTypeSection # SemanticTypeSection
-    |   typeAliasDecl # TypeAlias
-    |   structDecl # Struct
-    |   enumDecl # Enum
-    |   annotationDecl # Annotation
-    |   actionDecl # Action
-    |   automatonDecl # Automaton
-    |   functionDecl # Function
-    |   variableDecl # Variable
+    :   ImportStatement # GlobalDeclImport
+    |   IncludeStatement # GlobalDeclInclude
+    |   semanticTypeSectionDecl # GlobalDeclSemanticTypeSection
+    |   typeAliasDecl # GlobalDeclTypeAlias
+    |   structDecl # GlobalDeclStruct
+    |   enumDecl # GlobalDeclEnum
+    |   annotationDecl # GlobalDeclAnnotation
+    |   actionDecl # GlobalDeclAction
+    |   automatonDecl # GlobalDeclAutomaton
+    |   functionDecl # GlobalDeclFunction
+    |   variableDecl # GlobalDeclVariable
     ;
 
-semanticTypeSection
+semanticTypeSectionDecl
     :   TYPES
         L_BRACE decls=semanticTypeDecl* R_BRACE
     ;
@@ -45,8 +45,8 @@ semanticTypeDecl
     ;
 
 semanticTypeDef
-    :   SEMICOLON # Simple
-    |   L_BRACE values=enumSemanticTypeValue* R_BRACE # Enum
+    :   SEMICOLON # SemanticTypeDefSimple
+    |   L_BRACE values=enumSemanticTypeValue* R_BRACE # SemanticTypeDefEnum
     ;
 
 enumSemanticTypeValue
@@ -76,8 +76,8 @@ structTargetType
     ;
 
 structDefDecl
-    :   variableDecl # Variable
-    |   functionDecl # Function
+    :   variableDecl # StructDefDeclVariable
+    |   functionDecl # StructDefDeclFunction
     ;
 
 enumDecl
@@ -95,8 +95,8 @@ signedIntLit
         lit=IntegerLiteral
     ;
 
-sign:   MINUS # Minus
-    |   PLUS # Plus
+sign:   MINUS # MinusSign
+    |   PLUS # PlusSign
     ;
 
 annotationDecl
@@ -165,13 +165,13 @@ implementedConcepts
     ;
 
 automatonDefDecl
-    :   stateDecl # State
-    |   shiftDecl # Shift
-    |   constructorDecl # Constructor
-    |   destructorDecl # Destructor
-    |   procDecl # Proc
-    |   functionDecl # Function
-    |   variableDecl # Variable
+    :   stateDecl # AutomatonDefDeclState
+    |   shiftDecl # AutomatonDefDeclShift
+    |   constructorDecl # AutomatonDefDeclConstructor
+    |   destructorDecl # AutomatonDefDeclDestructor
+    |   procDecl # AutomatonDefDeclProc
+    |   functionDecl # AutomatonDefDeclFunction
+    |   variableDecl # AutomatonDefDeclVariable
     ;
 
 functionDecl
@@ -207,8 +207,8 @@ variableDecl
     ;
 
 variableKind
-    :   VAR # Var
-    |   VAL # Val
+    :   VAR # VariableKindVar
+    |   VAL # VariableKindVal
     ;
 
 stateDecl
@@ -218,9 +218,9 @@ stateDecl
     ;
 
 stateKind
-    :   INITSTATE # Initial
-    |   STATE # Regular
-    |   FINISHSTATE # Final
+    :   INITSTATE # StateKindInitial
+    |   STATE # StateKindRegular
+    |   FINISHSTATE # StateKindFinal
     ;
 
 identifierList
@@ -237,13 +237,13 @@ shiftDecl
     ;
 
 shiftSourceState
-    :   Identifier # Shorthand
-    |   L_BRACKET (states=identifierList COMMA?)? R_BRACKET # List
+    :   Identifier # ShiftSourceStateShorthand
+    |   L_BRACKET (states=identifierList COMMA?)? R_BRACKET # ShiftSourceStateList
     ;
 
 shiftBy
-    :   signature=functionSignature # Shorthand
-    |   L_SQUARE_BRACKET (signatures=functionSignatureList COMMA?)? R_SQUARE_BRACKET # List
+    :   signature=functionSignature # ShiftByShorthand
+    |   L_SQUARE_BRACKET (signatures=functionSignatureList COMMA?)? R_SQUARE_BRACKET # ShiftByList
     ;
 
 functionSignatureList
@@ -252,8 +252,8 @@ functionSignatureList
     ;
 
 functionSignature
-    :   name=Identifier # Shorthand
-    |   name=Identifier L_BRACKET (params=typeExprList COMMA?)? R_BRACKET # Qualified
+    :   name=Identifier # FunctionSignatureShorthand
+    |   name=Identifier L_BRACKET (params=typeExprList COMMA?)? R_BRACKET # FunctionSignatureQualified
     ;
 
 constructorDecl
@@ -305,9 +305,9 @@ functionBody
     ;
 
 contract
-    :   requiresContract # Requires
-    |   ensuresContract # Ensures
-    |   assignsContract # Assigns
+    :   requiresContract # ContractRequires
+    |   ensuresContract # ContractEnsures
+    |   assignsContract # ContractAssigns
     ;
 
 requiresContract
@@ -395,11 +395,11 @@ typeExprList
     ;
 
 typeExpr
-    :   primitiveLitTypeExpr # PrimitiveLit
-    |   nameTypeExpr # Name
-    |   pointerTypeExpr # Pointer
-    |   intersectionTypeExpr # Intersection
-    |   unionTypeExpr # Union
+    :   primitiveLitTypeExpr # TypeExprPrimitiveLit
+    |   nameTypeExpr # TypeExprName
+    |   pointerTypeExpr # TypeExprPointer
+    |   intersectionTypeExpr # TypeExprIntersection
+    |   unionTypeExpr # TypeExprUnion
     ;
 
 primitiveLitTypeExpr
@@ -438,14 +438,14 @@ typeArgList
     ;
 
 typeArg
-    :   typeExpr # TypeExpr
-    |   UNBOUNDED # Wildcard
+    :   typeExpr # TypeArgTypeExpr
+    |   UNBOUNDED # TypeArgWildcard
     ;
 
-stmt:   variableDecl # VariableDecl
-    |   ifStmt # If
-    |   assignStmt # Assign
-    |   expr=expr SEMICOLON # Expr
+stmt:   variableDecl # StmtVariableDecl
+    |   ifStmt # StmtIf
+    |   assignStmt # StmtAssign
+    |   expr=expr SEMICOLON # StmtExpr
     ;
 
 ifStmt
@@ -462,17 +462,17 @@ assignStmt
     ;
 
 assignOp
-    :   ASSIGN_OP # Assign
-    |   PLUS_EQ # AddAssign
-    |   MINUS_EQ # SubAssign
-    |   ASTERISK_EQ # MulAssign
-    |   SLASH_EQ # DivAssign
-    |   PERCENT_EQ # ModAssign
-    |   AMPERSAND_EQ # BitAndAssign
-    |   OR_EQ # BitOrAssign
-    |   XOR_EQ # BitXorAssign
-    |   L_SHIFT_EQ # LShiftAssign
-    |   R_SHIFT_EQ # RShiftAssign
+    :   ASSIGN_OP # OpAssign
+    |   PLUS_EQ # OpAddAssign
+    |   MINUS_EQ # OpSubAssign
+    |   ASTERISK_EQ # OpMulAssign
+    |   SLASH_EQ # OpDivAssign
+    |   PERCENT_EQ # OpModAssign
+    |   AMPERSAND_EQ # OpBitAndAssign
+    |   OR_EQ # OpBitOrAssign
+    |   XOR_EQ # OpBitXorAssign
+    |   L_SHIFT_EQ # OpLShiftAssign
+    |   R_SHIFT_EQ # OpRShiftAssign
     ;
 
 exprList
@@ -481,67 +481,67 @@ exprList
     ;
 
 atomicExpr
-    :   L_BRACKET expr=atomicExpr R_BRACKET # Paren
-    |   primitiveLitExpr # PrimitiveLit
-    |   arrayLitExpr # ArrayLit
-    |   access # Access
+    :   L_BRACKET expr=atomicExpr R_BRACKET # AtomicExprParen
+    |   primitiveLitExpr # AtomicExprPrimitiveLit
+    |   arrayLitExpr # AtomicExprArrayLit
+    |   access # AtomicExprAccess
     ;
 
-expr:   L_BRACKET expr=expr R_BRACKET # Paren
-    |   primitiveLitExpr # PrimitiveLit
-    |   arrayLitExpr # ArrayLit
-    |   access=access APOSTROPHE # Prev
-    |   procCallExpr # ProcCall
-    |   actionCallExpr # ActionCall
-    |   instantiationExpr # Instantiation
-    |   access # Access
-    |   op=unOp rhs=expr # Unary
-    |   lhs=access HAS typeExpr=typeExpr # HasConcept
-    |   lhs=expr IS typeExpr=typeExpr # TypeComparison
-    |   lhs=expr AS typeExpr=typeExpr # Cast
-    |   lhs=expr op=mulBinOp rhs=expr # Multiplicative
-    |   lhs=expr op=addBinOp rhs=expr # Additive
-    |   lhs=expr op=bitShiftOp rhs=expr # Shift
-    |   lhs=expr AMPERSAND rhs=expr # BitAnd
-    |   lhs=expr XOR rhs=expr # BitXor
-    |   lhs=expr OR rhs=expr # BitOr
-    |   lhs=expr op=relOp rhs=expr # Relational
-    |   lhs=expr DOUBLE_AMPERSAND rhs=expr # And
-    |   lhs=expr LOGIC_OR rhs=expr # Or
+expr:   L_BRACKET expr=expr R_BRACKET # ExprParen
+    |   primitiveLitExpr # ExprPrimitiveLit
+    |   arrayLitExpr # ExprArrayLit
+    |   access=access APOSTROPHE # ExprPrev
+    |   procCallExpr # ExprProcCall
+    |   actionCallExpr # ExprActionCall
+    |   instantiationExpr # ExprInstantiation
+    |   access # ExprAccess
+    |   op=unOp rhs=expr # ExprUnary
+    |   lhs=access HAS typeExpr=typeExpr # ExprHasConcept
+    |   lhs=expr IS typeExpr=typeExpr # ExprTypeComparison
+    |   lhs=expr AS typeExpr=typeExpr # ExprCast
+    |   lhs=expr op=mulBinOp rhs=expr # ExprMultiplicative
+    |   lhs=expr op=addBinOp rhs=expr # ExprAdditive
+    |   lhs=expr op=bitShiftOp rhs=expr # ExprShift
+    |   lhs=expr AMPERSAND rhs=expr # ExprBitAnd
+    |   lhs=expr XOR rhs=expr # ExprBitXor
+    |   lhs=expr OR rhs=expr # ExprBitOr
+    |   lhs=expr op=relOp rhs=expr # ExprRelational
+    |   lhs=expr DOUBLE_AMPERSAND rhs=expr # ExprAnd
+    |   lhs=expr LOGIC_OR rhs=expr # ExprOr
     ;
 
-unOp:   PLUS # Plus
-    |   MINUS # Neg
-    |   TILDE # BitNot
-    |   EXCLAMATION # Not
+unOp:   PLUS # UnOpPlus
+    |   MINUS # UnOpNeg
+    |   TILDE # UnOpBitNot
+    |   EXCLAMATION # UnOpNot
     ;
 
 mulBinOp
-    :   ASTERISK # Mul
-    |   SLASH # Div
-    |   PERCENT # Mod
+    :   ASTERISK # BinOpMul
+    |   SLASH # BinOpDiv
+    |   PERCENT # BinOpMod
     ;
 
 addBinOp
-    :   PLUS # Add
-    |   MINUS # Sub
+    :   PLUS # BinOpAdd
+    |   MINUS # BinOpSub
     ;
 
 // TODO: ensure contiguousness.
 bitShiftOp
-    :   L_ARROW L_ARROW L_ARROW # LogicalLeft
-    |   R_ARROW R_ARROW R_ARROW # LogicalRight
-    |   L_ARROW L_ARROW # ArithmeticLeft
-    |   R_ARROW R_ARROW # ArithmeticRight
+    :   L_ARROW L_ARROW L_ARROW # BinOpLogicalLeft
+    |   R_ARROW R_ARROW R_ARROW # BinOpLogicalRight
+    |   L_ARROW L_ARROW # BinOpArithmeticLeft
+    |   R_ARROW R_ARROW # BinOpArithmeticRight
     ;
 
 relOp
-    :   L_ARROW_EQ # LessEquals
-    |   R_ARROW_EQ # GreaterEquals
-    |   L_ARROW # Less
-    |   R_ARROW # Greater
-    |   EQ # Equals
-    |   EXCLAMATION_EQ # NotEquals
+    :   L_ARROW_EQ # BinOpLessEquals
+    |   R_ARROW_EQ # BinOpGreaterEquals
+    |   L_ARROW # BinOpLess
+    |   R_ARROW # BinOpGreater
+    |   EQ # BinOpEquals
+    |   EXCLAMATION_EQ # BinOpNotEquals
     ;
 
 primitiveLitExpr
@@ -549,13 +549,13 @@ primitiveLitExpr
     ;
 
 primitiveLit
-    :   IntegerLiteral # Int
-    |   FloatingPointLiteral # Float
-    |   DoubleQuotedString # String
-    |   CHARACTER # Char
-    |   TRUE # True
-    |   FALSE # False
-    |   NULL # Null
+    :   IntegerLiteral # PrimitiveLitInt
+    |   FloatingPointLiteral # PrimitiveLitFloat
+    |   DoubleQuotedString # PrimitiveLitString
+    |   CHARACTER # PrimitiveLitChar
+    |   TRUE # PrimitiveLitTrue
+    |   FALSE # PrimitiveLitFalse
+    |   NULL # PrimitiveLitNull
     ;
 
 arrayLitExpr
@@ -586,12 +586,12 @@ constructorArgList
     ;
 
 constructorArg
-    :   STATE ASSIGN_OP expr=atomicExpr # State
-    |   name=Identifier ASSIGN_OP expr=expr # Var
+    :   STATE ASSIGN_OP expr=atomicExpr # ConstructorArgState
+    |   name=Identifier ASSIGN_OP expr=expr # ConstructorArgVar
     ;
 
 access
-    :   name=Identifier # Name
-    |   base=access DOT field=Identifier # Field
-    |   base=access L_SQUARE_BRACKET index=expr R_SQUARE_BRACKET # Index
+    :   name=Identifier # AccessName
+    |   base=access DOT field=Identifier # AccessField
+    |   base=access L_SQUARE_BRACKET index=expr R_SQUARE_BRACKET # AccessIndex
     ;
