@@ -264,6 +264,19 @@ WHERE
    :   'where'
    ;
 
+FOR:    'for';
+
+IMPLEMENTS
+    :   'implements'
+    ;
+
+STATIC
+    :   'static'
+    ;
+
+HAS:    'has';
+
+
 IntegerLiteral:
     DecimalIntegerLiteral
     | HexIntegerLiteral

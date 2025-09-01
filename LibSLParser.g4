@@ -102,7 +102,7 @@ sign:   MINUS # MinusSign
 annotationDecl
     :   ANNOTATION name=Identifier
         L_BRACKET (params=annotationParamList COMMA?)? R_BRACKET
-        SEMICLON
+        SEMICOLON
     ;
 
 annotationParamList
@@ -504,7 +504,7 @@ expr:   L_BRACKET expr=expr R_BRACKET # ExprParen
     |   lhs=expr op=bitShiftOp rhs=expr # ExprShift
     |   lhs=expr AMPERSAND rhs=expr # ExprBitAnd
     |   lhs=expr XOR rhs=expr # ExprBitXor
-    |   lhs=expr OR rhs=expr # ExprBitOr
+    |   lhs=expr BIT_OR rhs=expr # ExprBitOr
     |   lhs=expr op=relOp rhs=expr # ExprRelational
     |   lhs=expr DOUBLE_AMPERSAND rhs=expr # ExprAnd
     |   lhs=expr LOGIC_OR rhs=expr # ExprOr
