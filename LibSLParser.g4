@@ -51,7 +51,7 @@ semanticTypeDef
 
 enumSemanticTypeValue
     :   name=Identifier
-        COLON expr=atomicExpr
+        COLON value=atomicExpr
         SEMICOLON
     ;
 
@@ -66,7 +66,7 @@ structDecl
     :   annotations=annotation*
         TYPE typeName=qualifiedTypeName
         targetType=structTargetType?
-        whereClause=whereClause?
+        typeConstraints=whereClause?
         (L_BRACE decls=structDefDecl* R_BRACE)?
     ;
 
@@ -91,7 +91,7 @@ enumDeclVariant
     ;
 
 signedIntLit
-    :   sign=sign
+    :   sign
         lit=IntegerLiteral
     ;
 
@@ -112,17 +112,17 @@ annotationParamList
 
 annotationParam
     :   name=Identifier
-        COLON typeExpr=typeExpr
+        COLON type=typeExpr
         (ASSIGN_OP default=expr)?
     ;
 
 actionDecl
     :   annotations=annotation*
         DEFINE ACTION name=Identifier
-        generics=generics?
+        typeParams=generics?
         L_BRACKET (params=actionParamList COMMA?)? R_BRACKET
         (COLON retTypeExpr=typeExpr)?
-        whereClause=whereClause?
+        typeConstrants=whereClause?
         SEMICOLON
     ;
 
@@ -134,15 +134,15 @@ actionParamList
 actionParam
     :   annotations=annotation*
         name=Identifier
-        COLON typeExpr=typeExpr
+        COLON type=typeExpr
     ;
 
 automatonDecl
     :   annotations=annotation*
         AUTOMATON isConcept=CONCEPT? name=qualifiedTypeName
         (L_BRACKET (constructorVariables=constructorVariableList COMMA?)? R_BRACKET)?
-        COLON typeExpr=typeExpr
-        (implementedConcepts=implementedConcepts COMMA?)*
+        COLON type=typeExpr
+        (implements=implementedConcepts COMMA?)*
         L_BRACE automatonDefDecl* R_BRACE
     ;
 
@@ -155,7 +155,7 @@ constructorVariable
     :   annotations=annotation*
         kind=variableKind
         name=Identifier
-        COLON typeExpr=typeExpr
+        COLON type=typeExpr
         (ASSIGN_OP init=expr)?
     ;
 
@@ -181,10 +181,10 @@ functionDecl
         (extensionFor=fullName DOT)?
         method=methodSpec?
         name=Identifier
-        generics=generics?
+        typeParams=generics?
         L_BRACKET (params=functionParamList COMMA?)? R_BRACKET
         (COLON retTypeExpr=typeExpr)?
-        whereClause=whereClause?
+        typeConstraints=whereClause?
         def=functionDef
     ;
 
@@ -201,7 +201,7 @@ variableDecl
     :   annotations=annotation*
         kind=variableKind
         name=Identifier
-        COLON typeExpr=typeExpr
+        COLON type=typeExpr
         (ASSIGN_OP init=expr)?
         SEMICOLON
     ;
@@ -281,10 +281,10 @@ procDecl
         PROC
         method=methodSpec?
         name=Identifier
-        generics=generics?
+        typeParams=generics?
         L_BRACKET (params=functionParamList COMMA?)? R_BRACKET
         (COLON retTypeExpr=typeExpr)?
-        whereClause=whereClause?
+        typeConstraints=whereClause?
         def=functionDef
     ;
 
@@ -296,7 +296,7 @@ functionParamList
 functionParam
     :   annotations=annotation*
         name=Identifier
-        COLON typeExpr=typeExpr
+        COLON type=typeExpr
     ;
 
 functionBody
@@ -313,21 +313,21 @@ contract
 requiresContract
     :   REQUIRES
         (name=Identifier COLON)?
-        expr=expr
+        spec=expr
         SEMICOLON
     ;
 
 ensuresContract
     :   ENSURES
         (name=Identifier COLON)?
-        expr=expr
+        spec=expr
         SEMICOLON
     ;
 
 assignsContract
     :   ASSIGNS
         (name=Identifier COLON)?
-        expr=expr
+        spec=expr
         SEMICOLON
     ;
 
@@ -343,12 +343,12 @@ annotationArgList
 
 annotationArg
     :   (name=Identifier ASSIGN_OP)?
-        expr=expr
+        value=expr
     ;
 
 qualifiedTypeName
     :   typeName=fullName
-        generics=generics?
+        typeParams=generics?
     ;
 
 fullName
@@ -365,25 +365,25 @@ whereClause
 typeConstraint
     :   param=Identifier
         COLON
-        variance=variance
+        variance=varianceSpec
         bound=typeArg
     ;
 
 generics
-    :   L_ARROW (generics=genericList COMMA?)? R_ARROW
+    :   L_ARROW (list=genericList COMMA?)? R_ARROW
     ;
 
 genericList
-    :   generics+=generic
-        (COMMA generics+=generic)*
+    :   params+=generic
+        (COMMA params+=generic)*
     ;
 
 generic
-    :   variance=variance
+    :   variance=varianceSpec
         name=Identifier
     ;
 
-variance
+varianceSpec
     :   OUT # Covariant
     |   IN # Contravariant
     |   # Invariant
@@ -395,20 +395,16 @@ typeExprList
     ;
 
 typeExpr
-    :   primitiveLitTypeExpr # TypeExprPrimitiveLit
+    :   lit=primitiveLit # TypeExprPrimitiveLit
     |   nameTypeExpr # TypeExprName
     |   pointerTypeExpr # TypeExprPointer
-    |   intersectionTypeExpr # TypeExprIntersection
-    |   unionTypeExpr # TypeExprUnion
-    ;
-
-primitiveLitTypeExpr
-    :   lit=primitiveLit
+    |   lhs=typeExpr AMPERSAND rhs=typeExpr # TypeExprIntersection
+    |   lhs=typeExpr BIT_OR rhs=typeExpr # TypeExprUnion
     ;
 
 nameTypeExpr
     :   typeName=fullName
-        generics=typeArgs?
+        typeArgs=typeArgSpec?
     ;
 
 pointerTypeExpr
@@ -416,20 +412,8 @@ pointerTypeExpr
         base=typeExpr
     ;
 
-intersectionTypeExpr
-    :   lhs=typeExpr
-        AMPERSAND
-        rhs=typeExpr
-    ;
-
-unionTypeExpr
-    :   lhs=typeExpr
-        BIT_OR
-        rhs=typeExpr
-    ;
-
-typeArgs
-    :   L_ARROW (generics=typeArgList COMMA?)? R_ARROW
+typeArgSpec
+    :   L_ARROW (list=typeArgList COMMA?)? R_ARROW
     ;
 
 typeArgList
@@ -445,7 +429,7 @@ typeArg
 stmt:   variableDecl # StmtVariableDecl
     |   ifStmt # StmtIf
     |   assignStmt # StmtAssign
-    |   expr=expr SEMICOLON # StmtExpr
+    |   inner=expr SEMICOLON # StmtExpr
     ;
 
 ifStmt
@@ -481,24 +465,24 @@ exprList
     ;
 
 atomicExpr
-    :   L_BRACKET expr=atomicExpr R_BRACKET # AtomicExprParen
-    |   primitiveLitExpr # AtomicExprPrimitiveLit
+    :   L_BRACKET inner=atomicExpr R_BRACKET # AtomicExprParen
+    |   lit=primitiveLit # AtomicExprPrimitiveLit
     |   arrayLitExpr # AtomicExprArrayLit
     |   access # AtomicExprAccess
     ;
 
-expr:   L_BRACKET expr=expr R_BRACKET # ExprParen
-    |   primitiveLitExpr # ExprPrimitiveLit
+expr:   L_BRACKET inner=expr R_BRACKET # ExprParen
+    |   lit=primitiveLit # ExprPrimitiveLit
     |   arrayLitExpr # ExprArrayLit
-    |   access=access APOSTROPHE # ExprPrev
+    |   base=access APOSTROPHE # ExprPrev
     |   procCallExpr # ExprProcCall
     |   actionCallExpr # ExprActionCall
     |   instantiationExpr # ExprInstantiation
     |   access # ExprAccess
     |   op=unOp rhs=expr # ExprUnary
-    |   lhs=access HAS typeExpr=typeExpr # ExprHasConcept
-    |   lhs=expr IS typeExpr=typeExpr # ExprTypeComparison
-    |   lhs=expr AS typeExpr=typeExpr # ExprCast
+    |   lhs=access HAS type=typeExpr # ExprHasConcept
+    |   lhs=expr IS type=typeExpr # ExprTypeComparison
+    |   lhs=expr AS type=typeExpr # ExprCast
     |   lhs=expr op=mulBinOp rhs=expr # ExprMultiplicative
     |   lhs=expr op=addBinOp rhs=expr # ExprAdditive
     |   lhs=expr op=bitShiftOp rhs=expr # ExprShift
@@ -544,10 +528,6 @@ relOp
     |   EXCLAMATION_EQ # BinOpNotEquals
     ;
 
-primitiveLitExpr
-    :   lit=primitiveLit
-    ;
-
 primitiveLit
     :   IntegerLiteral # PrimitiveLitInt
     |   FloatingPointLiteral # PrimitiveLitFloat
@@ -564,19 +544,19 @@ arrayLitExpr
 
 procCallExpr
     :   callee=access
-        generics=typeArgs?
+        typeArgs=typeArgSpec?
         L_BRACKET (args=exprList COMMA?)? R_BRACKET
     ;
 
 actionCallExpr
     :   ACTION name=Identifier
-        generics=typeArgs?
+        typeArgs=typeArgSpec?
         L_BRACKET (args=exprList COMMA?)? R_BRACKET
     ;
 
 instantiationExpr
     :   NEW name=fullName
-        generics=typeArgs?
+        typeArgs=typeArgSpec?
         L_BRACKET (args=constructorArgList COMMA?)? R_BRACKET
     ;
 
@@ -586,8 +566,8 @@ constructorArgList
     ;
 
 constructorArg
-    :   STATE ASSIGN_OP expr=atomicExpr # ConstructorArgState
-    |   name=Identifier ASSIGN_OP expr=expr # ConstructorArgVar
+    :   STATE ASSIGN_OP value=atomicExpr # ConstructorArgState
+    |   name=Identifier ASSIGN_OP value=expr # ConstructorArgVar
     ;
 
 access
