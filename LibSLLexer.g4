@@ -2,21 +2,21 @@ lexer grammar LibSLLexer;
 
 SEMICOLON : ';' ;
 
-ASSIGN_OP : '=' ;
+EQ : '=' ;
 
-EQ : '==' ;
+EQ_EQ : '==' ;
 
 L_BRACE : '{' ;
 
 R_BRACE : '}' ;
 
-L_BRACKET : '(' ;
+L_PAREN : '(' ;
 
-R_BRACKET : ')' ;
+R_PAREN : ')' ;
 
-L_SQUARE_BRACKET : '[' ;
+L_BRACKET : '[' ;
 
-R_SQUARE_BRACKET : ']' ;
+R_BRACKET : ']' ;
 
 DOT : '.' ;
 
@@ -24,11 +24,11 @@ COLON : ':' ;
 
 COMMA : ',' ;
 
-MINUS_ARROW : '->' ;
+ARROW : '->' ;
 
-L_ARROW : '<' ;
+L_ANGLE : '<' ;
 
-R_ARROW : '>' ;
+R_ANGLE : '>' ;
 
 ASTERISK : '*' ;
 
@@ -40,10 +40,6 @@ PLUS : '+' ;
 
 MINUS : '-' ;
 
-INCREMENT : '++' ;
-
-DECREMENT : '--' ;
-
 PLUS_EQ : '+=' ;
 
 MINUS_EQ : '-=' ;
@@ -54,39 +50,39 @@ SLASH_EQ : '/=' ;
 
 PERCENT_EQ : '%=' ;
 
-EXCLAMATION : '!' ;
+BANG : '!' ;
 
-EXCLAMATION_EQ : '!=' ;
+BANG_EQ : '!=' ;
 
-L_ARROW_EQ : '<=' ;
+L_ANGLE_EQ : '<=' ;
 
-R_ARROW_EQ : '>=' ;
+R_ANGLE_EQ : '>=' ;
 
-AMPERSAND : '&' ;
+AMP : '&' ;
 
-DOUBLE_AMPERSAND : '&&' ;
+AMP_AMP : '&&' ;
 
-BIT_OR : '|' ;
+PIPE : '|' ;
 
-LOGIC_OR : '||' ;
+PIPE_PIPE : '||' ;
 
-XOR : '^' ;
+CARET : '^' ;
 
 TILDE : '~' ;
 
-AMPERSAND_EQ : '&=' ;
+AMP_EQ : '&=' ;
 
-OR_EQ : '|=' ;
+PIPE_EQ : '|=' ;
 
-XOR_EQ : '^=' ;
+CARET_EQ : '^=' ;
 
-R_SHIFT_EQ: '>>=' ;
+R_ANGLE_R_ANGLE_EQ: '>>=' ;
 
-L_SHIFT_EQ: '<<=' ;
+L_ANGLE_L_ANGLE_EQ: '<<=' ;
 
-APOSTROPHE : '\'' ;
+QUOTE : '\'' ;
 
-BACK_QOUTE : '`' ;
+BACKTICK : '`' ;
 
 ImportStatement
    :   IMPORT .*? ';'
@@ -276,33 +272,37 @@ STATIC
 
 HAS:    'has';
 
+QUESTION
+    :   '?'
+    ;
 
-IntegerLiteral:
-    DecimalIntegerLiteral
-    | HexIntegerLiteral
-    | OctalIntegerLiteral
-    | BinaryIntegerLiteral
-;
 
-fragment DecimalIntegerLiteral: DecimalNumeral IntegerTypeSuffix?;
+IntegerLit
+    :   DecimalIntegerLit
+    |   HexIntegerLit
+    |   OctalIntegerLit
+    |   BinaryIntegerLit
+    ;
 
-fragment HexIntegerLiteral: HexNumeral IntegerTypeSuffix?;
+fragment DecimalIntegerLit: DecimalNumeral IntegerTypeSuffix?;
 
-fragment OctalIntegerLiteral: OctalNumeral IntegerTypeSuffix?;
+fragment HexIntegerLit: HexNumeral IntegerTypeSuffix?;
 
-fragment BinaryIntegerLiteral: BinaryNumeral IntegerTypeSuffix?;
+fragment OctalIntegerLit: OctalNumeral IntegerTypeSuffix?;
+
+fragment BinaryIntegerLit: BinaryNumeral IntegerTypeSuffix?;
 
 fragment DecimalNumeral: '0' | NonZeroDigit (Digits?);
 
 fragment IntegerTypeSuffix: [lLxsu] | 'ux' | 'us' | 'uL';
 
-FloatingPointLiteral: DecimalFloatingPointLiteral;
+FloatLit: DecimalFloatLit;
 
-fragment DecimalFloatingPointLiteral:
-    Digits '.' Digits? ExponentPart? FloatTypeSuffix?
-    | Digits ExponentPart FloatTypeSuffix?
-    | Digits FloatTypeSuffix
-;
+fragment DecimalFloatLit
+    :   Digits '.' Digits? ExponentPart? FloatTypeSuffix?
+    |   Digits ExponentPart FloatTypeSuffix?
+    |   Digits FloatTypeSuffix
+    ;
 
 fragment ExponentPart: ExponentIndicator SignedInteger;
 
@@ -323,11 +323,11 @@ fragment ESCAPED_QUOTE
    : '\\"'
    ;
 
-DoubleQuotedString
+StringLit
    :   '"' ( ESCAPED_QUOTE | ~('\n'|'\r') )*? '"'
    ;
 
-CHARACTER
+CharacterLit
    :   '\'' SingleCharacter '\''
    |   '\'' EscapeSequence '\''
    ;
@@ -344,11 +344,11 @@ fragment EscapeSequence
 
 fragment UnicodeEscape: '\\' 'u'+ Hex Hex Hex Hex;
 
-fragment OctalEscape:
-    '\\' OctalDigit
-    | '\\' OctalDigit OctalDigit
-    | '\\' ZeroToThree OctalDigit OctalDigit
-;
+fragment OctalEscape
+    :   '\\' OctalDigit
+    |   '\\' OctalDigit OctalDigit
+    |   '\\' ZeroToThree OctalDigit OctalDigit
+    ;
 
 fragment ZeroToThree: [0-3];
 
@@ -370,9 +370,10 @@ fragment BinaryNumeral: '0' [bB] BinaryDigit+;
 
 fragment BinaryDigit: [01];
 
-fragment
-NEWLINE
-  : '\r' '\n' | '\n' | '\r'
+fragment NEWLINE
+  : '\r' '\n'
+  | '\n'
+  | '\r'
   ;
 
 /*
@@ -392,8 +393,4 @@ COMMENT
 
 LINE_COMMENT
    :   ('//' ~[\r\n]*) -> channel(HIDDEN)
-   ;
-
-UNBOUNDED
-   :   '?'
    ;

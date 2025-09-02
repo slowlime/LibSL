@@ -10,11 +10,11 @@ file:   header?
     ;
 
 header
-    :   (LIBSL libslVersion=DoubleQuotedString SEMICOLON)
+    :   (LIBSL libslVersion=StringLit SEMICOLON)
         (LIBRARY libraryName=Identifier)
-        (VERSION version=DoubleQuotedString)?
-        (LANGUAGE language=DoubleQuotedString)?
-        (URL url=DoubleQuotedString)?
+        (VERSION version=StringLit)?
+        (LANGUAGE language=StringLit)?
+        (URL url=StringLit)?
         SEMICOLON
     ;
 
@@ -40,7 +40,7 @@ semanticTypeSectionDecl
 semanticTypeDecl
     :   annotations=annotation*
         typeName=qualifiedTypeName
-        L_BRACKET realType=typeExpr R_BRACKET
+        L_PAREN realType=typeExpr R_PAREN
         semanticTypeDef
     ;
 
@@ -58,7 +58,7 @@ enumSemanticTypeValue
 typeAliasDecl
     :   annotations=annotation*
         TYPEALIAS typeName=qualifiedTypeName
-        ASSIGN_OP def=typeExpr
+        EQ def=typeExpr
         SEMICOLON
     ;
 
@@ -87,7 +87,7 @@ enumDecl
     ;
 
 enumDeclVariant
-    :   name=Identifier ASSIGN_OP value=signedIntLit SEMICOLON
+    :   name=Identifier EQ value=signedIntLit SEMICOLON
     ;
 
 signedIntLit
@@ -101,7 +101,7 @@ sign:   MINUS # MinusSign
 
 annotationDecl
     :   ANNOTATION name=Identifier
-        L_BRACKET (params=annotationParamList COMMA?)? R_BRACKET
+        L_PAREN (params=annotationParamList COMMA?)? R_PAREN
         SEMICOLON
     ;
 
@@ -113,14 +113,14 @@ annotationParamList
 annotationParam
     :   name=Identifier
         COLON type=typeExpr
-        (ASSIGN_OP default=expr)?
+        (EQ default=expr)?
     ;
 
 actionDecl
     :   annotations=annotation*
         DEFINE ACTION name=Identifier
         typeParams=generics?
-        L_BRACKET (params=actionParamList COMMA?)? R_BRACKET
+        L_PAREN (params=actionParamList COMMA?)? R_PAREN
         (COLON retTypeExpr=typeExpr)?
         typeConstrants=whereClause?
         SEMICOLON
@@ -140,7 +140,7 @@ actionParam
 automatonDecl
     :   annotations=annotation*
         AUTOMATON isConcept=CONCEPT? name=qualifiedTypeName
-        (L_BRACKET (constructorVariables=constructorVariableList COMMA?)? R_BRACKET)?
+        (L_PAREN (constructorVariables=constructorVariableList COMMA?)? R_PAREN)?
         COLON type=typeExpr
         (implements=implementedConcepts COMMA?)*
         L_BRACE automatonDefDecl* R_BRACE
@@ -156,7 +156,7 @@ constructorVariable
         kind=variableKind
         name=Identifier
         COLON type=typeExpr
-        (ASSIGN_OP init=expr)?
+        (EQ init=expr)?
     ;
 
 implementedConcepts
@@ -182,7 +182,7 @@ functionDecl
         method=methodSpec?
         name=Identifier
         typeParams=generics?
-        L_BRACKET (params=functionParamList COMMA?)? R_BRACKET
+        L_PAREN (params=functionParamList COMMA?)? R_PAREN
         (COLON retTypeExpr=typeExpr)?
         typeConstraints=whereClause?
         def=functionDef
@@ -202,7 +202,7 @@ variableDecl
         kind=variableKind
         name=Identifier
         COLON type=typeExpr
-        (ASSIGN_OP init=expr)?
+        (EQ init=expr)?
         SEMICOLON
     ;
 
@@ -231,19 +231,19 @@ identifierList
 shiftDecl
     :   SHIFT
         from=shiftSourceState
-        MINUS_ARROW to=Identifier
+        ARROW to=Identifier
         BY by=shiftBy
         SEMICOLON
     ;
 
 shiftSourceState
     :   Identifier # ShiftSourceStateShorthand
-    |   L_BRACKET (states=identifierList COMMA?)? R_BRACKET # ShiftSourceStateList
+    |   L_PAREN (states=identifierList COMMA?)? R_PAREN # ShiftSourceStateList
     ;
 
 shiftBy
     :   signature=functionSignature # ShiftByShorthand
-    |   L_SQUARE_BRACKET (signatures=functionSignatureList COMMA?)? R_SQUARE_BRACKET # ShiftByList
+    |   L_BRACKET (signatures=functionSignatureList COMMA?)? R_BRACKET # ShiftByList
     ;
 
 functionSignatureList
@@ -253,7 +253,7 @@ functionSignatureList
 
 functionSignature
     :   name=Identifier # FunctionSignatureShorthand
-    |   name=Identifier L_BRACKET (params=typeExprList COMMA?)? R_BRACKET # FunctionSignatureQualified
+    |   name=Identifier L_PAREN (params=typeExprList COMMA?)? R_PAREN # FunctionSignatureQualified
     ;
 
 constructorDecl
@@ -261,7 +261,7 @@ constructorDecl
         CONSTRUCTOR
         method=methodSpec?
         name=Identifier
-        L_BRACKET (params=functionParamList COMMA?)? R_BRACKET
+        L_PAREN (params=functionParamList COMMA?)? R_PAREN
         (COLON retTypeExpr=typeExpr)?
         def=functionDef
     ;
@@ -271,7 +271,7 @@ destructorDecl
         DESTRUCTOR
         method=methodSpec?
         name=Identifier
-        L_BRACKET (params=functionParamList COMMA?)? R_BRACKET
+        L_PAREN (params=functionParamList COMMA?)? R_PAREN
         (COLON retTypeExpr=typeExpr)?
         def=functionDef
     ;
@@ -282,7 +282,7 @@ procDecl
         method=methodSpec?
         name=Identifier
         typeParams=generics?
-        L_BRACKET (params=functionParamList COMMA?)? R_BRACKET
+        L_PAREN (params=functionParamList COMMA?)? R_PAREN
         (COLON retTypeExpr=typeExpr)?
         typeConstraints=whereClause?
         def=functionDef
@@ -333,7 +333,7 @@ assignsContract
 
 annotation
     :   AT name=Identifier
-        (L_BRACKET (args=annotationArgList COMMA?)? R_BRACKET)?
+        (L_PAREN (args=annotationArgList COMMA?)? R_PAREN)?
     ;
 
 annotationArgList
@@ -342,7 +342,7 @@ annotationArgList
     ;
 
 annotationArg
-    :   (name=Identifier ASSIGN_OP)?
+    :   (name=Identifier EQ)?
         value=expr
     ;
 
@@ -370,7 +370,7 @@ typeConstraint
     ;
 
 generics
-    :   L_ARROW (list=genericList COMMA?)? R_ARROW
+    :   L_ANGLE (list=genericList COMMA?)? R_ANGLE
     ;
 
 genericList
@@ -398,8 +398,8 @@ typeExpr
     :   lit=primitiveLit # TypeExprPrimitiveLit
     |   nameTypeExpr # TypeExprName
     |   pointerTypeExpr # TypeExprPointer
-    |   lhs=typeExpr AMPERSAND rhs=typeExpr # TypeExprIntersection
-    |   lhs=typeExpr BIT_OR rhs=typeExpr # TypeExprUnion
+    |   lhs=typeExpr AMP rhs=typeExpr # TypeExprIntersection
+    |   lhs=typeExpr PIPE rhs=typeExpr # TypeExprUnion
     ;
 
 nameTypeExpr
@@ -413,7 +413,7 @@ pointerTypeExpr
     ;
 
 typeArgSpec
-    :   L_ARROW (list=typeArgList COMMA?)? R_ARROW
+    :   L_ANGLE (list=typeArgList COMMA?)? R_ANGLE
     ;
 
 typeArgList
@@ -423,7 +423,7 @@ typeArgList
 
 typeArg
     :   typeExpr # TypeArgTypeExpr
-    |   UNBOUNDED # TypeArgWildcard
+    |   QUESTION # TypeArgWildcard
     ;
 
 stmt:   variableDecl # StmtVariableDecl
@@ -446,17 +446,17 @@ assignStmt
     ;
 
 assignOp
-    :   ASSIGN_OP # OpAssign
+    :   EQ # OpAssign
     |   PLUS_EQ # OpAddAssign
     |   MINUS_EQ # OpSubAssign
     |   ASTERISK_EQ # OpMulAssign
     |   SLASH_EQ # OpDivAssign
     |   PERCENT_EQ # OpModAssign
-    |   AMPERSAND_EQ # OpBitAndAssign
-    |   OR_EQ # OpBitOrAssign
-    |   XOR_EQ # OpBitXorAssign
-    |   L_SHIFT_EQ # OpLShiftAssign
-    |   R_SHIFT_EQ # OpRShiftAssign
+    |   AMP_EQ # OpBitAndAssign
+    |   PIPE_EQ # OpBitOrAssign
+    |   CARET_EQ # OpBitXorAssign
+    |   L_ANGLE_L_ANGLE_EQ # OpLShiftAssign
+    |   R_ANGLE_R_ANGLE_EQ # OpRShiftAssign
     ;
 
 exprList
@@ -465,16 +465,16 @@ exprList
     ;
 
 atomicExpr
-    :   L_BRACKET inner=atomicExpr R_BRACKET # AtomicExprParen
+    :   L_PAREN inner=atomicExpr R_PAREN # AtomicExprParen
     |   lit=primitiveLit # AtomicExprPrimitiveLit
     |   arrayLitExpr # AtomicExprArrayLit
     |   access # AtomicExprAccess
     ;
 
-expr:   L_BRACKET inner=expr R_BRACKET # ExprParen
+expr:   L_PAREN inner=expr R_PAREN # ExprParen
     |   lit=primitiveLit # ExprPrimitiveLit
     |   arrayLitExpr # ExprArrayLit
-    |   base=access APOSTROPHE # ExprPrev
+    |   base=access QUOTE # ExprPrev
     |   procCallExpr # ExprProcCall
     |   actionCallExpr # ExprActionCall
     |   instantiationExpr # ExprInstantiation
@@ -486,18 +486,18 @@ expr:   L_BRACKET inner=expr R_BRACKET # ExprParen
     |   lhs=expr op=mulBinOp rhs=expr # ExprMultiplicative
     |   lhs=expr op=addBinOp rhs=expr # ExprAdditive
     |   lhs=expr op=bitShiftOp rhs=expr # ExprShift
-    |   lhs=expr AMPERSAND rhs=expr # ExprBitAnd
-    |   lhs=expr XOR rhs=expr # ExprBitXor
-    |   lhs=expr BIT_OR rhs=expr # ExprBitOr
+    |   lhs=expr AMP rhs=expr # ExprBitAnd
+    |   lhs=expr CARET rhs=expr # ExprBitXor
+    |   lhs=expr PIPE rhs=expr # ExprBitOr
     |   lhs=expr op=relOp rhs=expr # ExprRelational
-    |   lhs=expr DOUBLE_AMPERSAND rhs=expr # ExprAnd
-    |   lhs=expr LOGIC_OR rhs=expr # ExprOr
+    |   lhs=expr AMP_AMP rhs=expr # ExprAnd
+    |   lhs=expr PIPE_PIPE rhs=expr # ExprOr
     ;
 
 unOp:   PLUS # UnOpPlus
     |   MINUS # UnOpNeg
     |   TILDE # UnOpBitNot
-    |   EXCLAMATION # UnOpNot
+    |   BANG # UnOpNot
     ;
 
 mulBinOp
@@ -513,51 +513,51 @@ addBinOp
 
 // TODO: ensure contiguousness.
 bitShiftOp
-    :   L_ARROW L_ARROW L_ARROW # BinOpLogicalLeft
-    |   R_ARROW R_ARROW R_ARROW # BinOpLogicalRight
-    |   L_ARROW L_ARROW # BinOpArithmeticLeft
-    |   R_ARROW R_ARROW # BinOpArithmeticRight
+    :   L_ANGLE L_ANGLE L_ANGLE # BinOpLogicalLeft
+    |   R_ANGLE R_ANGLE R_ANGLE # BinOpLogicalRight
+    |   L_ANGLE L_ANGLE # BinOpArithmeticLeft
+    |   R_ANGLE R_ANGLE # BinOpArithmeticRight
     ;
 
 relOp
-    :   L_ARROW_EQ # BinOpLessEquals
-    |   R_ARROW_EQ # BinOpGreaterEquals
-    |   L_ARROW # BinOpLess
-    |   R_ARROW # BinOpGreater
-    |   EQ # BinOpEquals
-    |   EXCLAMATION_EQ # BinOpNotEquals
+    :   L_ANGLE_EQ # BinOpLessEquals
+    |   R_ANGLE_EQ # BinOpGreaterEquals
+    |   L_ANGLE # BinOpLess
+    |   R_ANGLE # BinOpGreater
+    |   EQ_EQ # BinOpEquals
+    |   BANG_EQ # BinOpNotEquals
     ;
 
 primitiveLit
-    :   IntegerLiteral # PrimitiveLitInt
-    |   FloatingPointLiteral # PrimitiveLitFloat
-    |   DoubleQuotedString # PrimitiveLitString
-    |   CHARACTER # PrimitiveLitChar
+    :   IntegerLit # PrimitiveLitInt
+    |   FloatLit # PrimitiveLitFloat
+    |   StringLit # PrimitiveLitStringLit
+    |   CharacterLit # PrimitiveLitChar
     |   TRUE # PrimitiveLitTrue
     |   FALSE # PrimitiveLitFalse
     |   NULL # PrimitiveLitNull
     ;
 
 arrayLitExpr
-    :   L_SQUARE_BRACKET (elems=exprList COMMA?)? R_SQUARE_BRACKET
+    :   L_BRACKET (elems=exprList COMMA?)? R_BRACKET
     ;
 
 procCallExpr
     :   callee=access
         typeArgs=typeArgSpec?
-        L_BRACKET (args=exprList COMMA?)? R_BRACKET
+        L_PAREN (args=exprList COMMA?)? R_PAREN
     ;
 
 actionCallExpr
     :   ACTION name=Identifier
         typeArgs=typeArgSpec?
-        L_BRACKET (args=exprList COMMA?)? R_BRACKET
+        L_PAREN (args=exprList COMMA?)? R_PAREN
     ;
 
 instantiationExpr
     :   NEW name=fullName
         typeArgs=typeArgSpec?
-        L_BRACKET (args=constructorArgList COMMA?)? R_BRACKET
+        L_PAREN (args=constructorArgList COMMA?)? R_PAREN
     ;
 
 constructorArgList
@@ -566,12 +566,12 @@ constructorArgList
     ;
 
 constructorArg
-    :   STATE ASSIGN_OP value=atomicExpr # ConstructorArgState
-    |   name=Identifier ASSIGN_OP value=expr # ConstructorArgVar
+    :   STATE EQ value=atomicExpr # ConstructorArgState
+    |   name=Identifier EQ value=expr # ConstructorArgVar
     ;
 
 access
     :   name=Identifier # AccessName
     |   base=access DOT field=Identifier # AccessField
-    |   base=access L_SQUARE_BRACKET index=expr R_SQUARE_BRACKET # AccessIndex
+    |   base=access L_BRACKET index=expr R_BRACKET # AccessIndex
     ;
