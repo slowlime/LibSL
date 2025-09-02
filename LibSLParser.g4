@@ -428,6 +428,11 @@ typeArg
     |   QUESTION # TypeArgWildcard
     ;
 
+block
+    :   stmt # BlockLoneStmt
+    |   L_BRACE stmts=stmt* R_BRACE # BlockBraced
+    ;
+
 stmt
     :   variableDecl # StmtVariableDecl
     |   ifStmt # StmtIf
@@ -436,9 +441,10 @@ stmt
     ;
 
 ifStmt
-    :   IF condition=expr
-        L_BRACE thenBranch=stmt* R_BRACE
-        (ELSE L_BRACE elseBranch=stmt* R_BRACE)?
+    :   IF
+        L_PAREN condition=expr R_PAREN
+        thenBranch=block
+        (ELSE block)?
     ;
 
 assignStmt
