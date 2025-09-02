@@ -1,266 +1,352 @@
 lexer grammar LibSLLexer;
 
-SEMICOLON : ';' ;
+SEMICOLON
+    :   ';'
+    ;
 
-EQ : '=' ;
+EQ
+    :   '='
+    ;
 
-EQ_EQ : '==' ;
+EQ_EQ
+    :   '=='
+    ;
 
-L_BRACE : '{' ;
+L_BRACE
+    :   '{'
+    ;
 
-R_BRACE : '}' ;
+R_BRACE
+    :   '}'
+    ;
 
-L_PAREN : '(' ;
+L_PAREN
+    :   '('
+    ;
 
-R_PAREN : ')' ;
+R_PAREN
+    :   ')'
+    ;
 
-L_BRACKET : '[' ;
+L_BRACKET
+    :   '['
+    ;
 
-R_BRACKET : ']' ;
+R_BRACKET
+    :   ']'
+    ;
 
-DOT : '.' ;
+DOT
+    :   '.'
+    ;
 
-COLON : ':' ;
+COLON
+    :   ':'
+    ;
 
-COMMA : ',' ;
+COMMA
+    :   ','
+    ;
 
-ARROW : '->' ;
+ARROW
+    :   '->'
+    ;
 
-L_ANGLE : '<' ;
+L_ANGLE
+    :   '<'
+    ;
 
-R_ANGLE : '>' ;
+R_ANGLE
+    :   '>'
+    ;
 
-ASTERISK : '*' ;
+ASTERISK
+    :   '*'
+    ;
 
-SLASH : '/' ;
+SLASH
+    :   '/'
+    ;
 
-PERCENT : '%' ;
+PERCENT
+    :   '%'
+    ;
 
-PLUS : '+' ;
+PLUS
+    :   '+'
+    ;
 
-MINUS : '-' ;
+MINUS
+    :   '-'
+    ;
 
-PLUS_EQ : '+=' ;
+PLUS_EQ
+    :   '+='
+    ;
 
-MINUS_EQ : '-=' ;
+MINUS_EQ
+    :   '-='
+    ;
 
-ASTERISK_EQ : '*=' ;
+ASTERISK_EQ
+    :   '*='
+    ;
 
-SLASH_EQ : '/=' ;
+SLASH_EQ
+    :   '/='
+    ;
 
-PERCENT_EQ : '%=' ;
+PERCENT_EQ
+    :   '%='
+    ;
 
-BANG : '!' ;
+BANG
+    :   '!'
+    ;
 
-BANG_EQ : '!=' ;
+BANG_EQ
+    :   '!='
+    ;
 
-L_ANGLE_EQ : '<=' ;
+L_ANGLE_EQ
+    :   '<='
+    ;
 
-R_ANGLE_EQ : '>=' ;
+R_ANGLE_EQ
+    :   '>='
+    ;
 
-AMP : '&' ;
+AMP
+    :   '&'
+    ;
 
-AMP_AMP : '&&' ;
+AMP_AMP
+    :   '&&'
+    ;
 
-PIPE : '|' ;
+PIPE
+    :   '|'
+    ;
 
-PIPE_PIPE : '||' ;
+PIPE_PIPE
+    :   '||'
+    ;
 
-CARET : '^' ;
+CARET
+    :   '^'
+    ;
 
-TILDE : '~' ;
+TILDE
+    :   '~'
+    ;
 
-AMP_EQ : '&=' ;
+AMP_EQ
+    :   '&='
+    ;
 
-PIPE_EQ : '|=' ;
+PIPE_EQ
+    :   '|='
+    ;
 
-CARET_EQ : '^=' ;
+CARET_EQ
+    :   '^='
+    ;
 
-R_ANGLE_R_ANGLE_EQ: '>>=' ;
+R_ANGLE_R_ANGLE_EQ
+    :   '>>='
+    ;
 
-L_ANGLE_L_ANGLE_EQ: '<<=' ;
+L_ANGLE_L_ANGLE_EQ
+    :   '<<='
+    ;
 
-QUOTE : '\'' ;
+QUOTE
+    :   '\''
+    ;
 
-BACKTICK : '`' ;
+BACKTICK
+    :   '`'
+    ;
 
 ImportStatement
-   :   IMPORT .*? ';'
-   ;
+    :   IMPORT .*? ';'
+    ;
 
 IncludeStatement
-   :   INCLUDE .*? ';'
-   ;
+    :   INCLUDE .*? ';'
+    ;
 
 IMPORT
-   :   'import'
-   ;
+    :   'import'
+    ;
 
 INCLUDE
-   :   'include'
-   ;
+    :   'include'
+    ;
 
 LIBSL
-   :   'libsl'
-   ;
+    :   'libsl'
+    ;
 
 LIBRARY
-   :   'library'
-   ;
+    :   'library'
+    ;
 
 VERSION
-   :   'version'
-   ;
+    :   'version'
+    ;
 
 LANGUAGE
-   :   'language'
-   ;
+    :   'language'
+    ;
 
 URL
-   :   'url'
-   ;
+    :   'url'
+    ;
 
 TYPEALIAS
-   :   'typealias'
-   ;
+    :   'typealias'
+    ;
 
 TYPE
-   :   'type'
-   ;
+    :   'type'
+    ;
 
 TYPES
-   :   'types'
-   ;
+    :   'types'
+    ;
 
 ENUM
-   :   'enum'
-   ;
+    :   'enum'
+    ;
 
 ANNOTATION
-   :   'annotation'
-   ;
+    :   'annotation'
+    ;
 
 AUTOMATON
-   :   'automaton'
-   ;
+    :   'automaton'
+    ;
 
 CONCEPT
-   :   'concept'
-   ;
+    :   'concept'
+    ;
 
 VAR
-   :   'var'
-   ;
+    :   'var'
+    ;
 
 VAL
-   :   'val'
-   ;
+    :   'val'
+    ;
 
 INITSTATE
-   :   'initstate'
-   ;
+    :   'initstate'
+    ;
 
 STATE
-   :   'state'
-   ;
+    :   'state'
+    ;
 
 FINISHSTATE
-   :   'finishstate'
-   ;
+    :   'finishstate'
+    ;
 
 SHIFT
-   :   'shift'
-   ;
+    :   'shift'
+    ;
 
 NEW
-   :   'new'
-   ;
+    :   'new'
+    ;
 
 FUN
-   :   'fun'
-   ;
+    :   'fun'
+    ;
 
 CONSTRUCTOR
-   :   'constructor'
-   ;
+    :   'constructor'
+    ;
 
 DESTRUCTOR
-   :   'destructor'
-   ;
+    :   'destructor'
+    ;
 
 PROC
-   :   'proc'
-   ;
+    :   'proc'
+    ;
 
 AT
-   :   '@'
-   ;
+    :   '@'
+    ;
 
 ACTION
-   :   'action'
-   ;
+    :   'action'
+    ;
 
 REQUIRES
-   :   'requires'
-   ;
+    :   'requires'
+    ;
 
 ENSURES
-   :   'ensures'
-   ;
+    :   'ensures'
+    ;
 
 ASSIGNS
-   :   'assigns'
-   ;
+    :   'assigns'
+    ;
 
 TRUE
-   :   'true'
-   ;
+    :   'true'
+    ;
 
 FALSE
-   :   'false'
-   ;
+    :   'false'
+    ;
 
 DEFINE
-   :   'define'
-   ;
+    :   'define'
+    ;
 
 IF
-   :   'if'
-   ;
+    :   'if'
+    ;
 
 ELSE
-   :   'else'
-   ;
+    :   'else'
+    ;
 
 BY
-   :   'by'
-   ;
+    :   'by'
+    ;
 
 IS
-   :   'is'
-   ;
+    :   'is'
+    ;
 
 AS
-   :   'as'
-   ;
+    :   'as'
+    ;
 
 NULL
-   :   'null'
-   ;
+    :   'null'
+    ;
 
 IN
-   :   'in'
-   ;
+    :   'in'
+    ;
 
 OUT
-   :   'out'
-   ;
+    :   'out'
+    ;
 
 WHERE
-   :   'where'
-   ;
+    :   'where'
+    ;
 
-FOR:    'for';
+FOR
+    :   'for'
+    ;
 
 IMPLEMENTS
     :   'implements'
@@ -270,12 +356,13 @@ STATIC
     :   'static'
     ;
 
-HAS:    'has';
+HAS
+    :   'has'
+    ;
 
 QUESTION
     :   '?'
     ;
-
 
 IntegerLit
     :   DecimalIntegerLit
@@ -284,19 +371,37 @@ IntegerLit
     |   BinaryIntegerLit
     ;
 
-fragment DecimalIntegerLit: DecimalNumeral IntegerTypeSuffix?;
+fragment DecimalIntegerLit
+    :   DecimalNumeral IntegerTypeSuffix?
+    ;
 
-fragment HexIntegerLit: HexNumeral IntegerTypeSuffix?;
+fragment HexIntegerLit
+    :   HexNumeral IntegerTypeSuffix?
+    ;
 
-fragment OctalIntegerLit: OctalNumeral IntegerTypeSuffix?;
+fragment OctalIntegerLit
+    :   OctalNumeral IntegerTypeSuffix?
+    ;
 
-fragment BinaryIntegerLit: BinaryNumeral IntegerTypeSuffix?;
+fragment BinaryIntegerLit
+    :   BinaryNumeral IntegerTypeSuffix?
+    ;
 
-fragment DecimalNumeral: '0' | NonZeroDigit (Digits?);
+fragment DecimalNumeral
+    :   '0'
+    |   NonZeroDigit (Digits?)
+    ;
 
-fragment IntegerTypeSuffix: [lLxsu] | 'ux' | 'us' | 'uL';
+fragment IntegerTypeSuffix
+    :   [lLxsu]
+    |   'ux'
+    |   'us'
+    |   'uL'
+    ;
 
-FloatLit: DecimalFloatLit;
+FloatLit
+    :   DecimalFloatLit
+    ;
 
 fragment DecimalFloatLit
     :   Digits '.' Digits? ExponentPart? FloatTypeSuffix?
@@ -304,33 +409,43 @@ fragment DecimalFloatLit
     |   Digits FloatTypeSuffix
     ;
 
-fragment ExponentPart: ExponentIndicator SignedInteger;
+fragment ExponentPart
+    :   ExponentIndicator SignedInteger
+    ;
 
-fragment ExponentIndicator: [eE];
+fragment ExponentIndicator
+    :   [eE]
+    ;
 
-fragment SignedInteger: Sign? Digits;
+fragment SignedInteger
+    :   Sign? Digits
+    ;
 
-fragment Sign: [+-];
+fragment Sign
+    :   [+-]
+    ;
 
-fragment FloatTypeSuffix: [fFdD];
+fragment FloatTypeSuffix
+    :   [fFdD]
+    ;
 
 Identifier
-   :   [a-zA-Z_$][a-zA-Z0-9_$]*
-   |   '`' .*? '`'
-   ;
+    :   [a-zA-Z_$][a-zA-Z0-9_$]*
+    |   '`' .*? '`'
+    ;
 
 fragment ESCAPED_QUOTE
-   : '\\"'
-   ;
+    :   '\\"'
+    ;
 
 StringLit
-   :   '"' ( ESCAPED_QUOTE | ~('\n'|'\r') )*? '"'
-   ;
+    :   '"' (ESCAPED_QUOTE | ~('\n' | '\r'))*? '"'
+    ;
 
 CharacterLit
-   :   '\'' SingleCharacter '\''
-   |   '\'' EscapeSequence '\''
-   ;
+    :   '\'' SingleCharacter '\''
+    |   '\'' EscapeSequence '\''
+    ;
 
 fragment SingleCharacter
     :   ~['\\\r\n]
@@ -338,11 +453,13 @@ fragment SingleCharacter
 
 fragment EscapeSequence
     :   '\\' [btnfr"'\\]
-        | UnicodeEscape
-        | OctalEscape
+    |   UnicodeEscape
+    |   OctalEscape
     ;
 
-fragment UnicodeEscape: '\\' 'u'+ Hex Hex Hex Hex;
+fragment UnicodeEscape
+    :   '\\' 'u'+ Hex Hex Hex Hex
+    ;
 
 fragment OctalEscape
     :   '\\' OctalDigit
@@ -350,47 +467,68 @@ fragment OctalEscape
     |   '\\' ZeroToThree OctalDigit OctalDigit
     ;
 
-fragment ZeroToThree: [0-3];
+fragment ZeroToThree
+    :   [0-3]
+    ;
 
-fragment Digits: Digit+;
+fragment Digits
+    :   Digit+
+    ;
 
-Digit: ('0'..'9');
+Digit
+    :   [0-9]
+    ;
 
-fragment NonZeroDigit: [1-9];
+fragment NonZeroDigit
+    :   [1-9]
+    ;
 
-fragment Hex: Digit | [a-fA-F];
+fragment Hex
+    :   Digit
+    |   [a-fA-F]
+    ;
 
-fragment HexNumeral: '0' [xX] Hex+;
+fragment HexNumeral
+    :   '0' [xX] Hex+
+    ;
 
-fragment OctalNumeral: '0' OctalDigit+;
+fragment OctalNumeral
+    :   '0' OctalDigit+
+    ;
 
-fragment OctalDigit: [0-7];
+fragment OctalDigit
+    :   [0-7]
+    ;
 
-fragment BinaryNumeral: '0' [bB] BinaryDigit+;
+fragment BinaryNumeral
+    :   '0' [bB] BinaryDigit+
+    ;
 
-fragment BinaryDigit: [01];
+fragment BinaryDigit
+    :   [01]
+    ;
 
 fragment NEWLINE
-  : '\r' '\n'
-  | '\n'
-  | '\r'
-  ;
+    :   '\r' '\n'
+    |   '\n'
+    |   '\r'
+    ;
 
 /*
  *  Whitespace and comments
  */
 WS
-   :   [ \t]+ -> channel(HIDDEN)
-   ;
+    :   [ \t]+ -> channel(HIDDEN)
+    ;
 
 BR
-   :   [\r\n\u000C]+ -> channel(HIDDEN)
-   ;
+    :   [\r\n\u000C]+ -> channel(HIDDEN)
+    ;
 
 COMMENT
-   :   '/*' .*? '*/' -> channel(HIDDEN)
-   ;
+    :   '/*' .*? '*/' -> channel(HIDDEN)
+    ;
 
 LINE_COMMENT
-   :   ('//' ~[\r\n]*) -> channel(HIDDEN)
-   ;
+    :   '//' ~[\r\n]* -> channel(HIDDEN)
+    ;

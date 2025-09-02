@@ -4,7 +4,8 @@ options {
     tokenVocab = LibSLLexer;
 }
 
-file:   header?
+file
+    :   header?
         globalDecl*
         EOF
     ;
@@ -95,7 +96,8 @@ signedIntLit
         lit=IntegerLiteral
     ;
 
-sign:   MINUS # MinusSign
+sign
+    :   MINUS # MinusSign
     |   PLUS # PlusSign
     ;
 
@@ -426,7 +428,8 @@ typeArg
     |   QUESTION # TypeArgWildcard
     ;
 
-stmt:   variableDecl # StmtVariableDecl
+stmt
+    :   variableDecl # StmtVariableDecl
     |   ifStmt # StmtIf
     |   assignStmt # StmtAssign
     |   inner=expr SEMICOLON # StmtExpr
@@ -471,7 +474,8 @@ atomicExpr
     |   access # AtomicExprAccess
     ;
 
-expr:   L_PAREN inner=expr R_PAREN # ExprParen
+expr
+    :   L_PAREN inner=expr R_PAREN # ExprParen
     |   lit=primitiveLit # ExprPrimitiveLit
     |   arrayLitExpr # ExprArrayLit
     |   base=access QUOTE # ExprPrev
@@ -494,7 +498,8 @@ expr:   L_PAREN inner=expr R_PAREN # ExprParen
     |   lhs=expr PIPE_PIPE rhs=expr # ExprOr
     ;
 
-unOp:   PLUS # UnOpPlus
+unOp
+    :   PLUS # UnOpPlus
     |   MINUS # UnOpNeg
     |   TILDE # UnOpBitNot
     |   BANG # UnOpNot
