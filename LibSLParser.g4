@@ -6,7 +6,7 @@ options {
 
 file
     :   header?
-        globalDecl*
+        decls+=globalDecl*
         EOF
     ;
 
@@ -35,11 +35,11 @@ globalDecl
 
 semanticTypeSectionDecl
     :   TYPES
-        L_BRACE decls=semanticTypeDecl* R_BRACE
+        L_BRACE decls+=semanticTypeDecl* R_BRACE
     ;
 
 semanticTypeDecl
-    :   annotations=annotation*
+    :   annotations+=annotation*
         typeName=qualifiedTypeName
         L_PAREN realType=typeExpr R_PAREN
         semanticTypeDef
@@ -47,7 +47,7 @@ semanticTypeDecl
 
 semanticTypeDef
     :   SEMICOLON # SemanticTypeDefSimple
-    |   L_BRACE values=enumSemanticTypeValue* R_BRACE # SemanticTypeDefEnum
+    |   L_BRACE values+=enumSemanticTypeValue* R_BRACE # SemanticTypeDefEnum
     ;
 
 enumSemanticTypeValue
@@ -57,18 +57,18 @@ enumSemanticTypeValue
     ;
 
 typeAliasDecl
-    :   annotations=annotation*
+    :   annotations+=annotation*
         TYPEALIAS typeName=qualifiedTypeName
         EQ def=typeExpr
         SEMICOLON
     ;
 
 structDecl
-    :   annotations=annotation*
+    :   annotations+=annotation*
         TYPE typeName=qualifiedTypeName
         targetType=structTargetType?
         typeConstraints=whereClause?
-        (L_BRACE decls=structDefDecl* R_BRACE)?
+        (L_BRACE decls+=structDefDecl* R_BRACE)?
     ;
 
 structTargetType
@@ -82,9 +82,9 @@ structDefDecl
     ;
 
 enumDecl
-    :   annotations=annotation*
+    :   annotations+=annotation*
         ENUM typeName=qualifiedTypeName
-        L_BRACE variants=enumDeclVariant* R_BRACE
+        L_BRACE variants+=enumDeclVariant* R_BRACE
     ;
 
 enumDeclVariant
@@ -119,7 +119,7 @@ annotationParam
     ;
 
 actionDecl
-    :   annotations=annotation*
+    :   annotations+=annotation*
         DEFINE ACTION name=Identifier
         typeParams=generics?
         L_PAREN (params=actionParamList COMMA?)? R_PAREN
@@ -134,13 +134,13 @@ actionParamList
     ;
 
 actionParam
-    :   annotations=annotation*
+    :   annotations+=annotation*
         name=Identifier
         COLON type=typeExpr
     ;
 
 automatonDecl
-    :   annotations=annotation*
+    :   annotations+=annotation*
         AUTOMATON isConcept=CONCEPT? name=qualifiedTypeName
         (L_PAREN (constructorVariables=constructorVariableList COMMA?)? R_PAREN)?
         COLON type=typeExpr
@@ -154,7 +154,7 @@ constructorVariableList
     ;
 
 constructorVariable
-    :   annotations=annotation*
+    :   annotations+=annotation*
         kind=variableKind
         name=Identifier
         COLON type=typeExpr
@@ -177,7 +177,7 @@ automatonDefDecl
     ;
 
 functionDecl
-    :   annotations=annotation*
+    :   annotations+=annotation*
         static=STATIC?
         FUN
         (extensionFor=fullName DOT)?
@@ -200,7 +200,7 @@ functionDef
     ;
 
 variableDecl
-    :   annotations=annotation*
+    :   annotations+=annotation*
         kind=variableKind
         name=Identifier
         COLON type=typeExpr
@@ -259,7 +259,7 @@ functionSignature
     ;
 
 constructorDecl
-    :   annotations=annotation*
+    :   annotations+=annotation*
         CONSTRUCTOR
         method=methodSpec?
         name=Identifier
@@ -269,7 +269,7 @@ constructorDecl
     ;
 
 destructorDecl
-    :   annotations=annotation*
+    :   annotations+=annotation*
         DESTRUCTOR
         method=methodSpec?
         name=Identifier
@@ -279,7 +279,7 @@ destructorDecl
     ;
 
 procDecl
-    :   annotations=annotation*
+    :   annotations+=annotation*
         PROC
         method=methodSpec?
         name=Identifier
@@ -296,14 +296,14 @@ functionParamList
     ;
 
 functionParam
-    :   annotations=annotation*
+    :   annotations+=annotation*
         name=Identifier
         COLON type=typeExpr
     ;
 
 functionBody
-    :   contracts=contract*
-        stmts=stmt*
+    :   contracts+=contract*
+        stmts+=stmt*
     ;
 
 contract
@@ -430,7 +430,7 @@ typeArg
 
 block
     :   stmt # BlockLoneStmt
-    |   L_BRACE stmts=stmt* R_BRACE # BlockBraced
+    |   L_BRACE stmts+=stmt* R_BRACE # BlockBraced
     ;
 
 stmt
