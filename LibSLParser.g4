@@ -367,7 +367,7 @@ whereClause
 typeConstraint
     :   param=Identifier
         COLON
-        variance=varianceSpec
+        variance=varianceSpec?
         bound=typeArg
     ;
 
@@ -381,14 +381,14 @@ genericList
     ;
 
 generic
-    :   variance=varianceSpec
+    :   variance=varianceSpec?
         name=Identifier
     ;
 
 varianceSpec
     :   OUT # Covariant
     |   IN # Contravariant
-    |   # Invariant
+    |   IN OUT # Invariant
     ;
 
 typeExprList
