@@ -168,11 +168,11 @@ BACKTICK
     :   '`'
     ;
 
-ImportStatement
+ImportDecl
     :   IMPORT .*? ';'
     ;
 
-IncludeStatement
+IncludeDecl
     :   INCLUDE .*? ';'
     ;
 

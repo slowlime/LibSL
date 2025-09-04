@@ -11,8 +11,8 @@ file
     ;
 
 header
-    :   (LIBSL libslVersion=StringLit SEMICOLON)
-        (LIBRARY libraryName=Identifier)
+    :   LIBSL libslVersion=StringLit SEMICOLON
+        LIBRARY libraryName=Identifier
         (VERSION version=StringLit)?
         (LANGUAGE language=StringLit)?
         (URL url=StringLit)?
@@ -20,8 +20,8 @@ header
     ;
 
 globalDecl
-    :   ImportStatement # GlobalDeclImport
-    |   IncludeStatement # GlobalDeclInclude
+    :   ImportDecl # GlobalDeclImport
+    |   IncludeDecl # GlobalDeclInclude
     |   semanticTypeSectionDecl # GlobalDeclSemanticTypeSection
     |   typeAliasDecl # GlobalDeclTypeAlias
     |   structDecl # GlobalDeclStruct
@@ -123,7 +123,7 @@ actionDecl
         DEFINE ACTION name=Identifier
         typeParams=generics?
         L_PAREN (params=actionParamList COMMA?)? R_PAREN
-        (COLON retTypeExpr=typeExpr)?
+        (COLON retType=typeExpr)?
         typeConstrants=whereClause?
         SEMICOLON
     ;
@@ -141,11 +141,11 @@ actionParam
 
 automatonDecl
     :   annotations+=annotation*
-        AUTOMATON isConcept=CONCEPT? name=qualifiedTypeName
+        AUTOMATON concept=CONCEPT? name=qualifiedTypeName
         (L_PAREN (constructorVariables=constructorVariableList COMMA?)? R_PAREN)?
         COLON type=typeExpr
         (implements=implementedConcepts COMMA?)*
-        L_BRACE automatonDefDecl* R_BRACE
+        L_BRACE decls+=automatonDefDecl* R_BRACE
     ;
 
 constructorVariableList
@@ -185,7 +185,7 @@ functionDecl
         name=Identifier
         typeParams=generics?
         L_PAREN (params=functionParamList COMMA?)? R_PAREN
-        (COLON retTypeExpr=typeExpr)?
+        (COLON retType=typeExpr)?
         typeConstraints=whereClause?
         def=functionDef
     ;
@@ -195,8 +195,8 @@ methodSpec
     ;
 
 functionDef
-    :   L_BRACE body=functionBody R_BRACE
-    |   SEMICOLON?
+    :   L_BRACE body=functionBody R_BRACE # FunctionDefBraced
+    |   SEMICOLON? # FunctionDefSemicolon
     ;
 
 variableDecl
@@ -264,7 +264,7 @@ constructorDecl
         method=methodSpec?
         name=Identifier
         L_PAREN (params=functionParamList COMMA?)? R_PAREN
-        (COLON retTypeExpr=typeExpr)?
+        (COLON retType=typeExpr)?
         def=functionDef
     ;
 
@@ -274,7 +274,7 @@ destructorDecl
         method=methodSpec?
         name=Identifier
         L_PAREN (params=functionParamList COMMA?)? R_PAREN
-        (COLON retTypeExpr=typeExpr)?
+        (COLON retType=typeExpr)?
         def=functionDef
     ;
 
@@ -285,7 +285,7 @@ procDecl
         name=Identifier
         typeParams=generics?
         L_PAREN (params=functionParamList COMMA?)? R_PAREN
-        (COLON retTypeExpr=typeExpr)?
+        (COLON retType=typeExpr)?
         typeConstraints=whereClause?
         def=functionDef
     ;
@@ -339,8 +339,8 @@ annotation
     ;
 
 annotationArgList
-    :   annotationArg
-        (COMMA annotationArg)*
+    :   args+=annotationArg
+        (COMMA args+=annotationArg)*
     ;
 
 annotationArg
@@ -444,7 +444,7 @@ ifStmt
     :   IF
         L_PAREN condition=expr R_PAREN
         thenBranch=block
-        (ELSE block)?
+        (ELSE elseBranch=block)?
     ;
 
 assignStmt
@@ -490,7 +490,7 @@ expr
     |   instantiationExpr # ExprInstantiation
     |   access # ExprAccess
     |   op=unOp rhs=expr # ExprUnary
-    |   lhs=access HAS type=typeExpr # ExprHasConcept
+    |   lhs=access HAS concept=Identifier # ExprHasConcept
     |   lhs=expr IS type=typeExpr # ExprTypeComparison
     |   lhs=expr AS type=typeExpr # ExprCast
     |   lhs=expr op=mulBinOp rhs=expr # ExprMultiplicative
