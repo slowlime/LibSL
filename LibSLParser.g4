@@ -476,8 +476,14 @@ exprList
 atomicExpr
     :   L_PAREN inner=atomicExpr R_PAREN # AtomicExprParen
     |   lit=primitiveLit # AtomicExprPrimitiveLit
+    |   signedNumLit # AtomicExprSignedNumLit
     |   arrayLitExpr # AtomicExprArrayLit
     |   access # AtomicExprAccess
+    ;
+
+signedNumLit
+    :   sign lit=IntLit # SignedNumLitInt
+    |   sign lit=FloatLit # SignedNumLitFloat
     ;
 
 expr
