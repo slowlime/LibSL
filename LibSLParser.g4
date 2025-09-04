@@ -262,7 +262,7 @@ constructorDecl
     :   annotations+=annotation*
         CONSTRUCTOR
         method=methodSpec?
-        name=Identifier
+        name=Identifier?
         L_PAREN (params=functionParamList COMMA?)? R_PAREN
         (COLON retType=typeExpr)?
         def=functionDef
@@ -272,7 +272,7 @@ destructorDecl
     :   annotations+=annotation*
         DESTRUCTOR
         method=methodSpec?
-        name=Identifier
+        name=Identifier?
         L_PAREN (params=functionParamList COMMA?)? R_PAREN
         (COLON retType=typeExpr)?
         def=functionDef
