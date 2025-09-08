@@ -20,8 +20,8 @@ header
     ;
 
 globalDecl
-    :   ImportDecl # GlobalDeclImport
-    |   IncludeDecl # GlobalDeclInclude
+    :   importDecl # GlobalDeclImport
+    |   includeDecl # GlobalDeclInclude
     |   semanticTypeSectionDecl # GlobalDeclSemanticTypeSection
     |   typeAliasDecl # GlobalDeclTypeAlias
     |   structDecl # GlobalDeclStruct
@@ -31,6 +31,19 @@ globalDecl
     |   automatonDecl # GlobalDeclAutomaton
     |   functionDecl # GlobalDeclFunction
     |   variableDecl # GlobalDeclVariable
+    ;
+
+importDecl
+    :   IMPORT path SEMICOLON
+    ;
+
+includeDecl
+    :   INCLUDE path SEMICOLON
+    ;
+
+path
+    :   StringLit # PathStringLit
+    |   BarePath # PathBare
     ;
 
 semanticTypeSectionDecl

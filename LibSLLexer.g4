@@ -168,20 +168,12 @@ BACKTICK
     :   '`'
     ;
 
-ImportDecl
-    :   IMPORT .*? ';'
-    ;
-
-IncludeDecl
-    :   INCLUDE .*? ';'
-    ;
-
 IMPORT
-    :   'import'
+    :   'import' -> pushMode(Path)
     ;
 
 INCLUDE
-    :   'include'
+    :   'include' -> pushMode(Path)
     ;
 
 LIBSL
@@ -276,10 +268,6 @@ PROC
     :   'proc'
     ;
 
-AT
-    :   '@'
-    ;
-
 ACTION
     :   'action'
     ;
@@ -370,6 +358,11 @@ IntegerLit
     |   OctalIntegerLit
     |   BinaryIntegerLit
     ;
+
+AT
+    :   '@' -> pushMode(Annotation)
+    ;
+
 
 fragment DecimalIntegerLit
     :   DecimalNumeral IntegerTypeSuffix?
@@ -517,18 +510,57 @@ fragment NEWLINE
 /*
  *  Whitespace and comments
  */
-WS
-    :   [ \t]+ -> channel(HIDDEN)
+fragment WS
+    :   [ \t]+
     ;
 
-BR
-    :   [\r\n\u000C]+ -> channel(HIDDEN)
+fragment BR
+    :   [\r\n\u000C]+
     ;
 
-COMMENT
-    :   '/*' .*? '*/' -> channel(HIDDEN)
+fragment COMMENT
+    :   '/*' .*? '*/'
     ;
 
-LINE_COMMENT
-    :   '//' ~[\r\n]* -> channel(HIDDEN)
+fragment LINE_COMMENT
+    :   '//' ~[\r\n]*
+    ;
+
+fragment IGNORED
+    :   WS
+    |   BR
+    |   COMMENT
+    |   LINE_COMMENT
+    ;
+
+Ignored
+    :   IGNORED -> channel(HIDDEN)
+    ;
+
+mode Annotation;
+
+AnnoIgnored
+    :   IGNORED -> channel(HIDDEN)
+    ;
+
+AnnoIdentifier
+    :   Identifier -> type(Identifier), popMode
+    ;
+
+mode Path;
+
+PathIgnored
+    :   IGNORED -> channel(HIDDEN)
+    ;
+
+PathSemi
+    :   ';' -> type(SEMICOLON), popMode
+    ;
+
+PathStringLit
+    :   StringLit -> type(StringLit)
+    ;
+
+BarePath
+    :   [\p{Alnum}\p{General_Category=Other_Letter}!@$%^&*+=/\\.-]+
     ;
