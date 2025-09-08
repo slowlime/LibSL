@@ -106,7 +106,7 @@ enumDeclVariant
 
 signedIntLit
     :   sign
-        lit=IntegerLiteral
+        lit=IntegerLit
     ;
 
 sign
@@ -495,7 +495,7 @@ atomicExpr
     ;
 
 signedNumLit
-    :   sign lit=IntLit # SignedNumLitInt
+    :   sign lit=IntegerLit # SignedNumLitInt
     |   sign lit=FloatLit # SignedNumLitFloat
     ;
 
