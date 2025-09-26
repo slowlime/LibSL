@@ -380,7 +380,7 @@ whereClause
 typeConstraint
     :   param=Identifier
         COLON
-        bound=typeArg
+        bound=typeExpr
     ;
 
 generics
