@@ -380,7 +380,6 @@ whereClause
 typeConstraint
     :   param=Identifier
         COLON
-        variance=varianceSpec?
         bound=typeArg
     ;
 
@@ -437,7 +436,7 @@ typeArgList
     ;
 
 typeArg
-    :   typeExpr # TypeArgTypeExpr
+    :   variance=varianceSpec? typeExpr # TypeArgTypeExpr
     |   QUESTION # TypeArgWildcard
     ;
 
