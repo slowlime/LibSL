@@ -603,6 +603,7 @@ access
     :   name=ident # AccessName
     |   base=access DOT field=ident # AccessField
     |   base=access L_BRACKET index=expr R_BRACKET # AccessIndex
+    |   name=ident typeArgs=typeArgSpec? L_PAREN inner=access R_PAREN DOT field=ident # AccessAutomatonField
     ;
 
 ident
