@@ -360,7 +360,7 @@ IntegerLit
     ;
 
 AT
-    :   '@' -> pushMode(Annotation)
+    :   '@'
     ;
 
 
@@ -535,16 +535,6 @@ fragment IGNORED
 
 Ignored
     :   IGNORED -> channel(HIDDEN)
-    ;
-
-mode Annotation;
-
-AnnoIgnored
-    :   IGNORED -> channel(HIDDEN)
-    ;
-
-AnnoIdentifier
-    :   Identifier -> type(Identifier), popMode
     ;
 
 mode Path;

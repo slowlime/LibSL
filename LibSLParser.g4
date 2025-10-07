@@ -12,7 +12,7 @@ file
 
 header
     :   LIBSL libslVersion=StringLit SEMICOLON
-        LIBRARY libraryName=Identifier
+        LIBRARY libraryName=ident
         (VERSION version=StringLit)?
         (LANGUAGE language=StringLit)?
         (URL url=StringLit)?
@@ -64,7 +64,7 @@ semanticTypeDef
     ;
 
 enumSemanticTypeValue
-    :   name=Identifier
+    :   name=ident
         COLON value=atomicExpr
         SEMICOLON
     ;
@@ -101,7 +101,7 @@ enumDecl
     ;
 
 enumDeclVariant
-    :   name=Identifier EQ value=signedIntLit SEMICOLON
+    :   name=ident EQ value=signedIntLit SEMICOLON
     ;
 
 signedIntLit
@@ -115,7 +115,7 @@ sign
     ;
 
 annotationDecl
-    :   ANNOTATION name=Identifier
+    :   ANNOTATION name=ident
         L_PAREN (params=annotationParamList COMMA?)? R_PAREN
         SEMICOLON
     ;
@@ -126,14 +126,14 @@ annotationParamList
     ;
 
 annotationParam
-    :   name=Identifier
+    :   name=ident
         COLON type=typeExpr
         (EQ default=expr)?
     ;
 
 actionDecl
     :   annotations+=annotation*
-        DEFINE ACTION name=Identifier
+        DEFINE ACTION name=ident
         typeParams=generics?
         L_PAREN (params=actionParamList COMMA?)? R_PAREN
         (COLON retType=typeExpr)?
@@ -148,7 +148,7 @@ actionParamList
 
 actionParam
     :   annotations+=annotation*
-        name=Identifier
+        name=ident
         COLON type=typeExpr
     ;
 
@@ -169,14 +169,14 @@ constructorVariableList
 constructorVariable
     :   annotations+=annotation*
         kind=variableKind
-        name=Identifier
+        name=ident
         COLON type=typeExpr
         (EQ init=expr)?
     ;
 
 implementedConcepts
-    :   IMPLEMENTS concepts+=Identifier
-        (COMMA concepts+=Identifier)*
+    :   IMPLEMENTS concepts+=ident
+        (COMMA concepts+=ident)*
     ;
 
 automatonDefDecl
@@ -195,7 +195,7 @@ functionDecl
         FUN
         (extensionFor=fullName DOT)?
         method=methodSpec?
-        name=Identifier
+        name=ident
         typeParams=generics?
         L_PAREN (params=functionParamList COMMA?)? R_PAREN
         (COLON retType=typeExpr)?
@@ -215,7 +215,7 @@ functionDef
 variableDecl
     :   annotations+=annotation*
         kind=variableKind
-        name=Identifier
+        name=ident
         COLON type=typeExpr
         (EQ init=expr)?
         SEMICOLON
@@ -228,7 +228,7 @@ variableKind
 
 stateDecl
     :   kind=stateKind
-        names=identifierList
+        names=identList
         SEMICOLON
     ;
 
@@ -238,22 +238,22 @@ stateKind
     |   FINISHSTATE # StateKindFinal
     ;
 
-identifierList
-    :   names+=Identifier
-        (COMMA names+=Identifier)*
+identList
+    :   names+=ident
+        (COMMA names+=ident)*
     ;
 
 shiftDecl
     :   SHIFT
         from=shiftSourceState
-        ARROW to=Identifier
+        ARROW to=ident
         BY by=shiftBy
         SEMICOLON
     ;
 
 shiftSourceState
-    :   Identifier # ShiftSourceStateShorthand
-    |   L_PAREN (states=identifierList COMMA?)? R_PAREN # ShiftSourceStateList
+    :   ident # ShiftSourceStateShorthand
+    |   L_PAREN (states=identList COMMA?)? R_PAREN # ShiftSourceStateList
     ;
 
 shiftBy
@@ -267,15 +267,15 @@ functionSignatureList
     ;
 
 functionSignature
-    :   name=Identifier # FunctionSignatureShorthand
-    |   name=Identifier L_PAREN (params=typeExprList COMMA?)? R_PAREN # FunctionSignatureQualified
+    :   name=ident # FunctionSignatureShorthand
+    |   name=ident L_PAREN (params=typeExprList COMMA?)? R_PAREN # FunctionSignatureQualified
     ;
 
 constructorDecl
     :   annotations+=annotation*
         CONSTRUCTOR
         method=methodSpec?
-        name=Identifier?
+        name=ident?
         L_PAREN (params=functionParamList COMMA?)? R_PAREN
         (COLON retType=typeExpr)?
         def=functionDef
@@ -285,7 +285,7 @@ destructorDecl
     :   annotations+=annotation*
         DESTRUCTOR
         method=methodSpec?
-        name=Identifier?
+        name=ident?
         L_PAREN (params=functionParamList COMMA?)? R_PAREN
         (COLON retType=typeExpr)?
         def=functionDef
@@ -295,7 +295,7 @@ procDecl
     :   annotations+=annotation*
         PROC
         method=methodSpec?
-        name=Identifier
+        name=ident
         typeParams=generics?
         L_PAREN (params=functionParamList COMMA?)? R_PAREN
         (COLON retType=typeExpr)?
@@ -310,7 +310,7 @@ functionParamList
 
 functionParam
     :   annotations+=annotation*
-        name=Identifier
+        name=ident
         COLON type=typeExpr
     ;
 
@@ -327,27 +327,27 @@ contract
 
 requiresContract
     :   REQUIRES
-        (name=Identifier COLON)?
+        (name=ident COLON)?
         spec=expr
         SEMICOLON
     ;
 
 ensuresContract
     :   ENSURES
-        (name=Identifier COLON)?
+        (name=ident COLON)?
         spec=expr
         SEMICOLON
     ;
 
 assignsContract
     :   ASSIGNS
-        (name=Identifier COLON)?
+        (name=ident COLON)?
         spec=expr
         SEMICOLON
     ;
 
 annotation
-    :   AT name=Identifier
+    :   AT name=ident
         (L_PAREN (args=annotationArgList COMMA?)? R_PAREN)?
     ;
 
@@ -357,7 +357,7 @@ annotationArgList
     ;
 
 annotationArg
-    :   (name=Identifier EQ)?
+    :   (name=ident EQ)?
         value=expr
     ;
 
@@ -367,8 +367,8 @@ qualifiedTypeName
     ;
 
 fullName
-    :   components+=Identifier
-        (DOT components+=Identifier)*
+    :   components+=ident
+        (DOT components+=ident)*
     ;
 
 whereClause
@@ -378,7 +378,7 @@ whereClause
     ;
 
 typeConstraint
-    :   param=Identifier
+    :   param=ident
         COLON
         bound=typeExpr
     ;
@@ -394,7 +394,7 @@ genericList
 
 generic
     :   variance=varianceSpec?
-        name=Identifier
+        name=ident
     ;
 
 varianceSpec
@@ -508,7 +508,7 @@ expr
     |   instantiationExpr # ExprInstantiation
     |   access # ExprAccess
     |   op=unOp rhs=expr # ExprUnary
-    |   lhs=access HAS concept=Identifier # ExprHasConcept
+    |   lhs=access HAS concept=ident # ExprHasConcept
     |   lhs=expr IS type=typeExpr # ExprTypeComparison
     |   lhs=expr AS type=typeExpr # ExprCast
     |   lhs=expr op=mulBinOp rhs=expr # ExprMultiplicative
@@ -578,7 +578,7 @@ procCallExpr
     ;
 
 actionCallExpr
-    :   ACTION name=Identifier
+    :   ACTION name=ident
         typeArgs=typeArgSpec?
         L_PAREN (args=exprList COMMA?)? R_PAREN
     ;
@@ -596,11 +596,17 @@ constructorArgList
 
 constructorArg
     :   STATE EQ value=atomicExpr # ConstructorArgState
-    |   name=Identifier EQ value=expr # ConstructorArgVar
+    |   name=ident EQ value=expr # ConstructorArgVar
     ;
 
 access
-    :   name=Identifier # AccessName
-    |   base=access DOT field=Identifier # AccessField
+    :   name=ident # AccessName
+    |   base=access DOT field=ident # AccessField
     |   base=access L_BRACKET index=expr R_BRACKET # AccessIndex
+    ;
+
+ident
+    :   Identifier
+    |   STATIC
+    |   IMPLEMENTS
     ;
