@@ -596,7 +596,7 @@ constructorArgList
     ;
 
 constructorArg
-    :   STATE EQ value=atomicExpr # ConstructorArgState
+    :   STATE EQ state=ident # ConstructorArgState
     |   name=ident EQ value=expr # ConstructorArgVar
     ;
 
