@@ -158,6 +158,7 @@ automatonDecl
         (L_PAREN (constructorVariables=constructorVariableList COMMA?)? R_PAREN)?
         COLON type=typeExpr
         (implements=implementedConcepts COMMA?)*
+        typeConstraints=whereClause?
         L_BRACE decls+=automatonDefDecl* R_BRACE
     ;
 
