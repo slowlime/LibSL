@@ -556,6 +556,7 @@ relOp
     |   R_ANGLE # BinOpGreater
     |   EQ_EQ # BinOpEquals
     |   BANG_EQ # BinOpNotEquals
+    |   IN # BinOpIn
     ;
 
 primitiveLit
