@@ -30,6 +30,7 @@ globalDecl
     |   actionDecl # GlobalDeclAction
     |   automatonDecl # GlobalDeclAutomaton
     |   functionDecl # GlobalDeclFunction
+    |   procDecl # GlobalDeclProc
     |   variableDecl # GlobalDeclVariable
     ;
 
