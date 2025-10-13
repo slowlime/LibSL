@@ -491,6 +491,7 @@ atomicExpr
     |   lit=primitiveLit # AtomicExprPrimitiveLit
     |   signedNumLit # AtomicExprSignedNumLit
     |   arrayLitExpr # AtomicExprArrayLit
+    |   setLitExpr # AtomicExprSetLit
     |   access # AtomicExprAccess
     ;
 
@@ -503,6 +504,7 @@ expr
     :   L_PAREN inner=expr R_PAREN # ExprParen
     |   lit=primitiveLit # ExprPrimitiveLit
     |   arrayLitExpr # ExprArrayLit
+    |   setLitExpr # ExprSetLit
     |   base=access QUOTE # ExprPrev
     |   procCallExpr # ExprProcCall
     |   actionCallExpr # ExprActionCall
@@ -571,6 +573,10 @@ primitiveLit
 
 arrayLitExpr
     :   L_BRACKET (elems=exprList COMMA?)? R_BRACKET
+    ;
+
+setLitExpr
+    :   L_BRACE (elems=exprList COMMA?)? R_BRACE
     ;
 
 procCallExpr
