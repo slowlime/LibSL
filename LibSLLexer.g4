@@ -344,6 +344,10 @@ STATIC
     :   'static'
     ;
 
+PURE
+    :   'pure'
+    ;
+
 HAS
     :   'has'
     ;

@@ -193,7 +193,7 @@ automatonDefDecl
 
 functionDecl
     :   annotations+=annotation*
-        static=STATIC?
+        modifiers+=functionModifier*
         FUN
         (extensionFor=fullName DOT)?
         method=methodSpec?
@@ -203,6 +203,10 @@ functionDecl
         (COLON retType=typeExpr)?
         typeConstraints=whereClause?
         def=functionDef
+    ;
+
+functionModifier
+    :   STATIC # FunctionModifierStatic
     ;
 
 methodSpec
@@ -295,6 +299,7 @@ destructorDecl
 
 procDecl
     :   annotations+=annotation*
+        modifiers+=procModifier*
         PROC
         method=methodSpec?
         name=ident
@@ -303,6 +308,10 @@ procDecl
         (COLON retType=typeExpr)?
         typeConstraints=whereClause?
         def=functionDef
+    ;
+
+procModifier
+    :   PURE # ProcModifierPure
     ;
 
 functionParamList
@@ -619,4 +628,5 @@ ident
     :   Identifier
     |   STATIC
     |   IMPLEMENTS
+    |   PURE
     ;
