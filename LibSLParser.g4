@@ -339,15 +339,13 @@ contract
 requiresContract
     :   REQUIRES
         (name=ident COLON)?
-        spec=expr
-        SEMICOLON
+        spec=contractPredicate
     ;
 
 ensuresContract
     :   ENSURES
         (name=ident COLON)?
-        spec=expr
-        SEMICOLON
+        spec=contractPredicate
     ;
 
 assignsContract
@@ -355,6 +353,40 @@ assignsContract
         (name=ident COLON)?
         spec=expr
         SEMICOLON
+    ;
+
+// the top-level predicate rule used in contract specifications.
+contractPredicate
+    :   blockPredicate # ContractPredicateBlock
+    |   ifPredicate # ContractPredicateIf
+    |   expr SEMICOLON # ContractPredicateExpr
+    ;
+
+// a predicate or a expression (without a semicolon),
+// used when either is accepted as a part of an outer predicate.
+exprPredicate
+    :   blockPredicate # ExprPredicateBlock
+    |   expr # ExprPredicateExpr
+    ;
+
+// a statement-like predicate that can be used inside block predicates.
+predicate
+    :   blockPredicate # PredicateBlock
+    |   name=ident COLON predicate # PredicateNamed
+    |   variableDecl # PredicateVariableDecl
+    |   ifPredicate # PredicateIf
+    |   expr SEMICOLON # PredicateExpr
+    ;
+
+blockPredicate
+    :   L_BRACE predicates+=predicate* R_BRACE
+    ;
+
+ifPredicate
+    :   IF
+        L_PAREN condition=exprPredicate R_PAREN
+        thenBranch=predicate
+        (ELSE elseBranch=predicate)?
     ;
 
 annotation
