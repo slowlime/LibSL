@@ -364,6 +364,8 @@ contractPredicate
 
 // a predicate or a expression (without a semicolon),
 // used when either is accepted as a part of an outer predicate.
+//
+// NOTE: currently unused.
 exprPredicate
     :   blockPredicate # ExprPredicateBlock
     |   expr # ExprPredicateExpr
@@ -384,7 +386,7 @@ blockPredicate
 
 ifPredicate
     :   IF
-        L_PAREN condition=exprPredicate R_PAREN
+        L_PAREN condition=expr R_PAREN
         thenBranch=predicate
         (ELSE elseBranch=predicate)?
     ;
