@@ -492,6 +492,7 @@ stmt
     :   variableDecl # StmtVariableDecl
     |   ifStmt # StmtIf
     |   assignStmt # StmtAssign
+    |   cancelStmt # StmtCancel
     |   inner=expr SEMICOLON # StmtExpr
     ;
 
@@ -507,6 +508,10 @@ assignStmt
         op=assignOp
         rhs=expr
         SEMICOLON
+    ;
+
+cancelStmt
+    :   CANCEL SEMICOLON
     ;
 
 assignOp

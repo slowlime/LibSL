@@ -356,6 +356,10 @@ QUESTION
     :   '?'
     ;
 
+CANCEL
+    :   'cancel'
+    ;
+
 IntegerLit
     :   DecimalIntegerLit
     |   HexIntegerLit
