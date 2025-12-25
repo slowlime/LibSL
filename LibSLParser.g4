@@ -560,8 +560,8 @@ expr
     |   instantiationExpr # ExprInstantiation
     |   access # ExprAccess
     |   op=unOp rhs=expr # ExprUnary
-    |   lhs=access HAS concept=ident # ExprHasConcept
-    |   lhs=expr IS type=typeExpr # ExprTypeComparison
+    |   lhs=access not=BANG? HAS concept=ident # ExprHasConcept
+    |   lhs=expr not=BANG? IS type=typeExpr # ExprTypeComparison
     |   lhs=expr AS type=typeExpr # ExprCast
     |   lhs=expr op=mulBinOp rhs=expr # ExprMultiplicative
     |   lhs=expr op=addBinOp rhs=expr # ExprAdditive
@@ -607,7 +607,7 @@ relOp
     |   R_ANGLE # BinOpGreater
     |   EQ_EQ # BinOpEquals
     |   BANG_EQ # BinOpNotEquals
-    |   IN # BinOpIn
+    |   not=BANG? IN # BinOpIn
     ;
 
 primitiveLit
