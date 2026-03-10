@@ -506,10 +506,16 @@ ifStmt
     ;
 
 assignStmt
-    :   lhs=access
+    :   lhs=assignee
         op=assignOp
         rhs=expr
         SEMICOLON
+    ;
+
+assignee
+    :   name=ident # AssigneeName
+    |   base=expr DOT field=ident # AssigneeField
+    |   base=expr L_BRACKET index=expr R_BRACKET # AssigneeIndex
     ;
 
 cancelStmt
@@ -541,7 +547,7 @@ atomicExpr
     |   signedNumLit # AtomicExprSignedNumLit
     |   arrayLitExpr # AtomicExprArrayLit
     |   setLitExpr # AtomicExprSetLit
-    |   access # AtomicExprAccess
+    |   name=ident # AtomicExprName
     ;
 
 signedNumLit
@@ -554,13 +560,16 @@ expr
     |   lit=primitiveLit # ExprPrimitiveLit
     |   arrayLitExpr # ExprArrayLit
     |   setLitExpr # ExprSetLit
-    |   base=access QUOTE # ExprPrev
-    |   procCallExpr # ExprProcCall
+    |   name=ident typeArgs=typeArgSpec? L_PAREN (args=exprList COMMA?)? R_PAREN # ExprProcCallUnqualified
     |   actionCallExpr # ExprActionCall
     |   instantiationExpr # ExprInstantiation
-    |   access # ExprAccess
+    |   name=ident # ExprName
+    |   base=expr QUOTE # ExprPrev
+    |   base=expr DOT name=ident typeArgs=typeArgSpec? L_PAREN (args=exprList COMMA?)? R_PAREN # ExprProcCallQualified
+    |   base=expr DOT field=ident # ExprField
+    |   base=expr L_BRACKET index=expr R_BRACKET # ExprIndex
     |   op=unOp rhs=expr # ExprUnary
-    |   lhs=access not=BANG? HAS concept=ident # ExprHasConcept
+    |   lhs=expr not=BANG? HAS concept=ident # ExprHasConcept
     |   lhs=expr not=BANG? IS type=typeExpr # ExprTypeComparison
     |   lhs=expr AS type=typeExpr # ExprCast
     |   lhs=expr op=mulBinOp rhs=expr # ExprMultiplicative
@@ -628,12 +637,6 @@ setLitExpr
     :   L_BRACE (elems=exprList COMMA?)? R_BRACE
     ;
 
-procCallExpr
-    :   callee=access
-        typeArgs=typeArgSpec?
-        L_PAREN (args=exprList COMMA?)? R_PAREN
-    ;
-
 actionCallExpr
     :   ACTION name=ident
         typeArgs=typeArgSpec?
@@ -654,13 +657,6 @@ constructorArgList
 constructorArg
     :   STATE EQ state=ident # ConstructorArgState
     |   name=ident EQ value=expr # ConstructorArgVar
-    ;
-
-access
-    :   name=ident # AccessName
-    |   base=access DOT field=ident # AccessField
-    |   base=access L_BRACKET index=expr R_BRACKET # AccessIndex
-    |   name=ident typeArgs=typeArgSpec? L_PAREN inner=access R_PAREN DOT field=ident # AccessAutomatonField
     ;
 
 ident
