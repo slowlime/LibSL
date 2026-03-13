@@ -222,7 +222,7 @@ variableDecl
     :   annotations+=annotation*
         kind=variableKind
         name=ident
-        COLON type=typeExpr
+        (COLON type=typeExpr)?
         (EQ init=expr)?
         SEMICOLON
     ;
