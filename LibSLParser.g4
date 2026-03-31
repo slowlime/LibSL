@@ -106,7 +106,7 @@ enumDeclVariant
     ;
 
 signedIntLit
-    :   sign
+    :   sign?
         lit=IntegerLit
     ;
 
