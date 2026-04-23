@@ -93,6 +93,7 @@ structTargetType
 structDefDecl
     :   variableDecl # StructDefDeclVariable
     |   functionDecl # StructDefDeclFunction
+    |   procDecl # StructDefDeclProc
     ;
 
 enumDecl
