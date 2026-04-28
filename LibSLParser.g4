@@ -568,6 +568,7 @@ expr
     |   base=expr QUOTE # ExprPrev
     |   base=expr DOT name=ident typeArgs=typeArgSpec? L_PAREN (args=exprList COMMA?)? R_PAREN # ExprProcCallQualified
     |   base=expr DOT field=ident # ExprField
+    |   base=expr DOT ASTERISK # ExprDeref
     |   base=expr L_BRACKET index=expr R_BRACKET # ExprIndex
     |   op=unOp rhs=expr # ExprUnary
     |   lhs=expr not=BANG? HAS concept=ident # ExprHasConcept
