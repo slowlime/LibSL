@@ -454,10 +454,15 @@ typeExprList
         (COMMA typeExprs+=typeExpr)*
     ;
 
-typeExpr
-    :   lit=primitiveLit # TypeExprPrimitiveLit
+atomicTypeExpr
+    :   L_PAREN inner=typeExpr R_PAREN # TypeExprParen
+    |   lit=primitiveLit # TypeExprPrimitiveLit
     |   nameTypeExpr # TypeExprName
     |   pointerTypeExpr # TypeExprPointer
+    ;
+
+typeExpr
+    :   atomicTypeExpr # TypeExprAtomic
     |   lhs=typeExpr AMP rhs=typeExpr # TypeExprIntersection
     |   lhs=typeExpr PIPE rhs=typeExpr # TypeExprUnion
     ;
@@ -469,7 +474,7 @@ nameTypeExpr
 
 pointerTypeExpr
     :   ASTERISK
-        base=typeExpr
+        base=atomicTypeExpr
     ;
 
 typeArgSpec
