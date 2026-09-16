@@ -31,6 +31,7 @@ globalDecl
     |   automatonDecl # GlobalDeclAutomaton
     |   functionDecl # GlobalDeclFunction
     |   procDecl # GlobalDeclProc
+    |   predDecl # GlobalDeclPred
     |   variableDecl # GlobalDeclVariable
     ;
 
@@ -94,6 +95,7 @@ structDefDecl
     :   variableDecl # StructDefDeclVariable
     |   functionDecl # StructDefDeclFunction
     |   procDecl # StructDefDeclProc
+    |   predDecl # StructDefDeclPred
     ;
 
 enumDecl
@@ -188,6 +190,7 @@ automatonDefDecl
     |   constructorDecl # AutomatonDefDeclConstructor
     |   destructorDecl # AutomatonDefDeclDestructor
     |   procDecl # AutomatonDefDeclProc
+    |   predDecl # AutomatonDefDeclPred
     |   functionDecl # AutomatonDefDeclFunction
     |   variableDecl # AutomatonDefDeclVariable
     ;
@@ -217,6 +220,16 @@ methodSpec
 functionDef
     :   L_BRACE body=functionBody R_BRACE # FunctionDefBraced
     |   SEMICOLON? # FunctionDefSemicolon
+    ;
+
+predDecl
+    :   annotations+=annotation*
+        PRED
+        name=ident
+        typeParams=generics?
+        L_PAREN (params=functionParamList COMMA?)? R_PAREN
+        typeConstraints=whereClause?
+        def=blockPredicate?
     ;
 
 variableDecl

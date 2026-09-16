@@ -268,6 +268,10 @@ PROC
     :   'proc'
     ;
 
+PRED
+    :   'pred'
+    ;
+
 ACTION
     :   'action'
     ;
